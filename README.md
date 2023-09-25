@@ -1,2 +1,2 @@
-# data-models-and-database-management-systems
-Labs for data models and database management systems in BSUIR
+# Лабораторные работы по МДиСУДБ
+Толстой Дмитрий, гр. 153502
