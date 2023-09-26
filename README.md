@@ -253,6 +253,6 @@
       </li>
     </ol>
     <h2>Схема базы данных</h2>
-    <img src="https://github.com/westcrime/data-models-and-database-management-systems/Lab1/diagram.png" alt="схема БД">
+    <img src="https://github.com/westcrime/data-models-and-database-management-systems/blob/Lab1/diagram.png" alt="схема БД">
   </body>
 </html>
