@@ -91,8 +91,8 @@
         </ul>
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
-          Связи: Относится к ролям через таблицу <b>Roles</b> - Many
-          Mandatory-to-Many Optional, <b>User_logs</b> - One
+          Связи: Относится к ролям через таблицу <b>Roles</b> - One
+          Mandatory-to-Many Mandatory, <b>User_logs</b> - One
           Mandatory-to-Optional Many, <b>Reviews</b> - Many Optional-to-One
           Mandatory, <b>Orders</b> - Many Optional-to-One Mandatory,
           <b>Wishlists</b> - One Mandatory-to-One Mandatory, <b>Libraries</b> - One
@@ -109,7 +109,7 @@
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
           Связи: Назначается пользователям через таблицу <b>Users</b> -
-          Many-to-Many Mandatory.
+          Many Mandatory-to-One Mandatory.
         </p>
       </li>
       <li>
@@ -121,7 +121,8 @@
         </ul>
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
-            Связи: Относятся к играм через <b>Games</b> - One-to-Many Optional.
+            Связи: Относятся к играм через <b>Games</b> - One-to-Many Optional, <b>Users</b> -
+          One Mandatory-to-Many Optional
         </p>
       </li>
       <li>
@@ -138,7 +139,7 @@
         </ul>
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
-            Связи: Относятся к категориям через <b>Categories</b> - (Many Mandatory-to-Many Optional), <b>Publishers</b> - (Many Mandatory-to-Many Optional), <b>Platforms</b> - (Many Mandatory-to-Many Optional), <b>Cart</b> - (Many Optional-to-Many Optional), <b>Wishlist</b> - (Many Optional-to-Many Optional).
+            Связи: Относятся к категориям через <b>Categories</b> - Many Mandatory-to-Many Optional, <b>Publishers</b> - One Mandatory-to-Many Optional, <b>Platforms</b> - Many Mandatory-to-Many Optional, <b>Cart</b> - Many Optional-to-Many Optional, <b>Wishlist</b> - Many Optional-to-Many Optional.
         </p>
         </p>
       </li>
@@ -196,7 +197,7 @@
         </ul>
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
-            Связи: Относятся к играм через <b>Games</b> - Many Optional-to-Many Mandatory.
+            Связи: Относятся к играм через <b>Games</b> - Many Optional-to-One Mandatory.
         </p>
       </li>
       <li>
@@ -220,7 +221,7 @@
         </ul>
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
-            Связи: Относятся к пользователям через <b>Users</b> - Many Optional-to-One Mandatory.
+            Связи: Относятся к пользователям через <b>Users</b> - One Mandatory-to-Many Optional.
         </p>
       </li>
       <li>
@@ -231,26 +232,14 @@
           <li>order_date (Время и дата заказа): DATE</li>
           <li>game_id (Идентификатор заказанной игры): INT (Foreign Key)</li>
           <li>status (Описание статуса): VARCHAR</li>
+          <li>amount (Цена заказа) DECIMAL</li>
         </ul>
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
-            Связи: Относятся к пользователям через <b>Users</b> - One Mandatory-to-Many Optional, <b>Games</b> - One Mandatory-to-Many Optional, <b>Payments</b> - One Mandatory-to-One Optional.
+            Связи: Относятся к пользователям через <b>Users</b> - One Mandatory-to-Many Optional, <b>Games</b> - One Mandatory-to-Many Optional.
         </p>
       </li>
-      <li>
-        Платежи (Payments)
-        <ul>
-          <li>payment_id (Идентификатор платежа): INT (Primary Key)</li>
-          <li>order_id (Идентификатор заказа): INT (Foreign Key)</li>
-          <li>payment_date (Время и дата оплаты): DATE</li>
-          <li>amount (Цена оплаты): DECIMAL</li>
-        </ul>
-        <p>Ограничения: Нет дополнительных ограничений</p>
-        <p>
-            Связи: Относятся к заказам через <b>Orders</b> - One Optional-to-One Mandatory.
-        </p>
-      </li>
-    </ol>
+      </ol>
     <h2>Схема базы данных</h2>
     <img src="https://github.com/westcrime/data-models-and-database-management-systems/blob/Lab1/diagram.png" alt="схема БД">
   </body>
