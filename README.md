@@ -89,12 +89,10 @@
           </li>
           <li>password (Пароль): VARCHAR (хешированный пароль)</li>
           <li>library_id (Идентификатор библиотеки): INT (Foreign Key)</li>
-          <li>
-            wishlist_id (Идентификатор списка желаемого): INT (Foreign Key)
-          </li>
-          <li>
-            balance (Баланс пользователя): DECIMAL
-          </li>
+          <li>wishlist_id (Идентификатор списка желаемого): INT (Foreign Key)</li>
+          <li>balance (Баланс пользователя): DECIMAL</li>
+          <li>role_id (Идентификатор роли) INT</li>
+          <li>profile_pic (Путь к картинке профиля) VARCHAR(50)</li>
         </ul>
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
@@ -141,11 +139,11 @@
           <li>review_id (Идентификатор отзыва): INT (Primary Key)</li>
           <li>rating (Рейтинг игры): INT(0-5)</li>
           <li>description (Описание отзыва): VARCHAR</li>
+          <li>game_id (Идентификатор пользователя): INT</li>
         </ul>
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
-            Связи: Относятся к играм через <b>Games</b> - One-to-Many Optional, <b>Users</b> -
-          One Mandatory-to-Many Optional
+            Связи: Относятся к играм через <b>Games</b> - One-to-Many Optional, <b>Users</b> - One Mandatory-to-Many Optional
         </p>
       </li>
       <li>
@@ -153,16 +151,15 @@
         <ul>
           <li>game_id (Идентификатор игры): INT (Primary Key)</li>
           <li>name (Название игры): VARCHAR (Уникальное значение)</li>
-          <li>description (Описание игры): VARCHAR</li>
+          <li>game_description (Описание игры): VARCHAR</li>
           <li>category_id (Идентификатор категории): INT (Foreign Key)</li>
           <li>publisher_id (Идентификатор издателя): INT (Foreign Key)</li>
           <li>platform_id (Идентификатор платформы): INT (Foreign Key)</li>
-          <li>review_id (Идентификатор отзыва): INT (Foreign Key)</li>
           <li>pic_id (Идентификатор картинок) : INT (Foreign Key)</li>
         </ul>
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
-            Связи: Относятся к категориям через <b>Categories</b> - Many Mandatory-to-Many Optional, <b>Publishers</b> - One Mandatory-to-Many Optional, <b>Platforms</b> - Many Mandatory-to-Many Optional, <b>Cart</b> - Many Optional-to-Many Optional, <b>Wishlist</b> - Many Optional-to-Many Optional, <b>Pictures</b> - Many Mandatory-to-Many Optional.
+            Связи: Относятся к категориям через <b>Categories</b> - Many Mandatory-to-Many Optional, <b>Publishers</b> - One Mandatory-to-Many Optional, <b>Platforms</b> - Many Mandatory-to-Many Optional, <b>Carts</b> - Many Optional-to-Many Optional, <b>Wishlist</b> - Many Optional-to-Many Optional, <b>Pictures</b> - Many Mandatory-to-Many Optional.
         </p>
         </p>
       </li>
@@ -270,7 +267,7 @@
         </ul>
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
-            Связи: Относятся к пользователям через <b>Users</b> - One Mandatory-to-Many Optional, <b>Games</b> - One Mandatory-to-Many Optional.
+            Связи: Относятся к пользователям через <b>Users</b> - One Mandatory-to-Many Optional, <b>Games</b> - Many Mandatory-to-Many Optional.
         </p>
       </li>
       </ol>
