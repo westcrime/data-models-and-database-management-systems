@@ -151,16 +151,15 @@
         <ul>
           <li>game_id (Идентификатор игры): INT (Primary Key)</li>
           <li>name (Название игры): VARCHAR (Уникальное значение)</li>
-          <li>description (Описание игры): VARCHAR</li>
+          <li>game_description (Описание игры): VARCHAR</li>
           <li>category_id (Идентификатор категории): INT (Foreign Key)</li>
           <li>publisher_id (Идентификатор издателя): INT (Foreign Key)</li>
           <li>platform_id (Идентификатор платформы): INT (Foreign Key)</li>
-          <li>review_id (Идентификатор отзыва): INT (Foreign Key)</li>
           <li>pic_id (Идентификатор картинок) : INT (Foreign Key)</li>
         </ul>
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
-            Связи: Относятся к категориям через <b>Categories</b> - Many Mandatory-to-Many Optional, <b>Publishers</b> - One Mandatory-to-Many Optional, <b>Platforms</b> - Many Mandatory-to-Many Optional, <b>Cart</b> - Many Optional-to-Many Optional, <b>Wishlist</b> - Many Optional-to-Many Optional, <b>Pictures</b> - Many Mandatory-to-Many Optional.
+            Связи: Относятся к категориям через <b>Categories</b> - Many Mandatory-to-Many Optional, <b>Publishers</b> - One Mandatory-to-Many Optional, <b>Platforms</b> - Many Mandatory-to-Many Optional, <b>Carts</b> - Many Optional-to-Many Optional, <b>Wishlist</b> - Many Optional-to-Many Optional, <b>Pictures</b> - Many Mandatory-to-Many Optional.
         </p>
         </p>
       </li>
@@ -268,7 +267,7 @@
         </ul>
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
-            Связи: Относятся к пользователям через <b>Users</b> - One Mandatory-to-Many Optional, <b>Games</b> - One Mandatory-to-Many Optional.
+            Связи: Относятся к пользователям через <b>Users</b> - One Mandatory-to-Many Optional, <b>Games</b> - Many Mandatory-to-Many Optional.
         </p>
       </li>
       </ol>
