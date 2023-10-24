@@ -89,12 +89,10 @@
           </li>
           <li>password (Пароль): VARCHAR (хешированный пароль)</li>
           <li>library_id (Идентификатор библиотеки): INT (Foreign Key)</li>
-          <li>
-            wishlist_id (Идентификатор списка желаемого): INT (Foreign Key)
-          </li>
-          <li>
-            balance (Баланс пользователя): DECIMAL
-          </li>
+          <li>wishlist_id (Идентификатор списка желаемого): INT (Foreign Key)</li>
+          <li>balance (Баланс пользователя): DECIMAL</li>
+          <li>role_id (Идентификатор роли) INT</li>
+          <li>profile_pic (Путь к картинке профиля) VARCHAR(50)</li>
         </ul>
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
@@ -141,11 +139,11 @@
           <li>review_id (Идентификатор отзыва): INT (Primary Key)</li>
           <li>rating (Рейтинг игры): INT(0-5)</li>
           <li>description (Описание отзыва): VARCHAR</li>
+          <li>game_id (Идентификатор пользователя): INT</li>
         </ul>
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
-            Связи: Относятся к играм через <b>Games</b> - One-to-Many Optional, <b>Users</b> -
-          One Mandatory-to-Many Optional
+            Связи: Относятся к играм через <b>Games</b> - One-to-Many Optional, <b>Users</b> - One Mandatory-to-Many Optional
         </p>
       </li>
       <li>
