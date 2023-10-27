@@ -1,0 +1,6 @@
+********* ЗАПРОС *********
+CREATE TABLE Publishers (publisher_id serial PRIMARY KEY, name VARCHAR ( 50 ) UNIQUE NOT NULL, description VARCHAR ( 500 ) NOT NULL )
+;
+**************************
+
+CREATE TABLE
