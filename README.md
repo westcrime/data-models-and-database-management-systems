@@ -284,7 +284,7 @@
       </li>
       </ol>
     <h2>Схема базы данных</h2>
-    <span><img src="https://github.com/westcrime/data-models-and-database-management-systems/blob/Lab2/diagram.png?raw=true"/></span>
+    <span><img src="https://github.com/westcrime/data-models-and-database-management-systems/blob/master/diagram.png?raw=true"/></span>
 
   </body>
 </html>
