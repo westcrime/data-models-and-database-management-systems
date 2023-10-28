@@ -4,3 +4,23 @@ CREATE TABLE Publishers (publisher_id serial PRIMARY KEY, name VARCHAR ( 50 ) UN
 **************************
 
 CREATE TABLE
+             Список отношений
+ Схема  |    Имя     |   Тип   | Владелец  
+--------+------------+---------+-----------
+ public | publishers | таблица | westcrime
+(1 строка)
+
+********* ЗАПРОС *********
+CREATE TABLE Platforms (platform_id serial PRIMARY KEY, name VARCHAR ( 50 ) UNIQUE NOT NULL);
+**************************
+
+CREATE TABLE
+********* ЗАПРОС *********
+CREATE TABLE Categories (category_id serial PRIMARY KEY, category_name VARCHAR ( 50 ) UNIQUE NOT NULL);
+**************************
+
+CREATE TABLE
+********* ЗАПРОС *********
+CREATE TABLE Pictures (picture_id serial PRIMARY KEY, path VARCHAR ( 100 ) UNIQUE NOT NULL);
+**************************
+
