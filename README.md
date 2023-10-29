@@ -86,8 +86,9 @@
           <li>nickname (Имя): VARCHAR</li>
           <li>password (Пароль): VARCHAR (хешированный пароль)</li>
           <li>email (Адрес электронной почты): VARCHAR (уникальное значение)</li>
+          <li>role_id (Идентификатор роли): INT (Foreign Key)</li>
+          <li>profile_pic_path (Путь к картинке профиля) VARCHAR</li>
           <li>balance (Баланс пользователя): DECIMAL</li>
-          <li>profile_pic (Путь к картинке профиля) VARCHAR(50)</li>
         </ul>
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
@@ -95,8 +96,7 @@
           <b>Roles</b> - Many Mandatory-to-One Mandatory, 
           <b>User_logs</b> - One Mandatory-to-Optional Many, 
           <b>Reviews</b> - Many Optional-to-One Mandatory, 
-          <b>Orders</b> - One Mandatory-to-Many Optional, 
-          <b>Wishlists</b> - One Mandatory-to-Many Optional, 
+          <b>Orders</b> - One Mandatory-to-Many Optional,
           <b>Libraries</b> - One Mandatory-to-Many Optional, 
           <b>Carts</b> - One Mandatory-to-Many Optional, 
           <b>Payments</b> - One Mandatory-to-Many Optional.
@@ -149,47 +149,25 @@
         <ul>
           <li>game_id (Идентификатор игры): SERIAL (Primary Key)</li>
           <li>name (Название игры): VARCHAR (Уникальное значение)</li>
-          <li>game_description (Описание игры): VARCHAR</li>
+          <li>description (Описание игры): VARCHAR</li>
           <li>publisher_id (Идентификатор издателя): INT (Foreign Key)</li>
+          <li>category_id (Идентификатор жанра): INT (Foreign Key)</li>
+          <li>cost (Стоимость игры): DECIMAL</li>
+          <li>picture_path (Путь к картинке): VARCHAR</li>
         </ul>
         <p>Ограничения: Нет дополнительных ограничений</p>
         <p>
         Связи:
-        <b>Categories</b> - Many Optional-to-Many Mandatory, 
+        <b>Categories</b> - Many Optional-to-One Mandatory, 
+        <b>Libraries</b> - One MandatoryMandatory-to-Many Optional, 
+        <b>Orders</b> - Many Mandatory-to-Many Optional, 
         <b>Publishers</b> - Many Optional-to-One Mandatory, 
         <b>Platforms</b> - Many Optional-to-Many Mandatory, 
-        <b>Carts</b> - One Mandatory-to-Many Optional, 
-        <b>Wishlist</b> - One Mandatory-to-Many Optional, 
-        <b>Pictures</b> - Many Optional-to-Many Optional.
-        </p>
-      </li>
-      <li>
-        Картинки (Pictures)
-        <ul>
-          <li>picture_id (Идентификатор картинки): SERIAL (Primary Key)</li>
-          <li>path (Путь к картинке): VARCHAR</li>
-        </ul>
-        <p>Ограничения: Нет дополнительных ограничений</p>
-        <p>
-          Связи: 
-          <b>Games</b> - Many Optional-to-Many Optional.
+        <b>Carts</b> - One Mandatory-to-Many Optional.
         </p>
       </li>
       <li>
         Корзины (Carts)
-        <ul>
-          <li>game_id (Идентификатор игры): INT (Foreign Key)</li>
-          <li>user_id (Идентификатор пользователя): INT (Foreign Key)</li>
-        </ul>
-        <p>Ограничения: Нет дополнительных ограничений</p>
-        <p>
-          Связи:
-          <b>Games</b> - Many Optional-to-One Mandatory, 
-          <b>Users</b> - Many Optional-to-One Mandatory.
-        </p>
-      </li>
-      <li>
-        Списки желаемого (Wishlists)
         <ul>
           <li>game_id (Идентификатор игры): INT (Foreign Key)</li>
           <li>user_id (Идентификатор пользователя): INT (Foreign Key)</li>

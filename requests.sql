@@ -1,0 +1,183 @@
+CREATE TABLE Platforms 
+(
+    platform_id SERIAL PRIMARY KEY NOT NULL,
+    name VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE Publishers
+(
+    publisher_id SERIAL PRIMARY KEY NOT NULL,
+    name VARCHAR(50) UNIQUE NOT NULL,
+    description VARCHAR(500) UNIQUE NOT NULL
+);
+
+CREATE TABLE Categories
+(
+    category_id SERIAL PRIMARY KEY NOT NULL,
+    name VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE Roles 
+(
+    role_id SERIAL PRIMARY KEY NOT NULL,
+    name VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE Users 
+(
+    user_id SERIAL PRIMARY KEY NOT NULL,
+    nickname VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(50) UNIQUE NOT NULL,
+    role_id INT REFERENCES Roles(role_id),
+    profile_pic_path VARCHAR(100) UNIQUE,
+    balance DECIMAL NOT NULL
+);
+
+CREATE TABLE Games 
+(
+    game_id SERIAL PRIMARY KEY NOT NULL,
+    name VARCHAR(50) UNIQUE NOT NULL,
+    description VARCHAR(500) NOT NULL,
+    publisher_id INT REFERENCES Publishers(publisher_id) NOT NULL,
+    category_id INT REFERENCES Categories(category_id) NOT NULL,
+    cost DECIMAL NOT NULL,
+    picture_path VARCHAR(100) UNIQUE
+);
+
+CREATE TABLE Platforms_Games
+(
+    game_id INT REFERENCES Games(game_id) NOT NULL,
+    platform_id INT REFERENCES Platforms(platform_id) NOT NULL
+);
+
+CREATE TABLE Carts
+(
+    game_id INT REFERENCES Games(game_id) NOT NULL,
+    user_id INT REFERENCES Users(user_id) NOT NULL
+);
+
+CREATE TABLE Libraries
+(
+    game_id INT REFERENCES Games(game_id) NOT NULL,
+    user_id INT REFERENCES Users(user_id) NOT NULL
+);
+
+CREATE TABLE User_logs 
+(
+    user_log_id SERIAL PRIMARY KEY NOT NULL,
+    user_id INT REFERENCES Users(user_id) NOT NULL,
+    date_of_event DATE NOT NULL,
+    description VARCHAR(250) NOT NULL
+);
+
+CREATE TABLE Payments 
+(
+    payment_id SERIAL PRIMARY KEY NOT NULL,
+    payment_date DATE NOT NULL,
+    user_id INT REFERENCES Users(user_id) NOT NULL,
+    description VARCHAR(250) NOT NULL,
+    amount DECIMAL NOT NULL
+);
+
+CREATE TABLE Orders 
+(
+    order_id SERIAL PRIMARY KEY NOT NULL,
+    user_id INT REFERENCES Users(user_id) NOT NULL,
+    order_date DATE NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    amount DECIMAL NOT NULL
+);
+
+CREATE TABLE Orders_Games
+(
+    game_id INT REFERENCES Games(game_id) NOT NULL,
+    order_id INT REFERENCES Orders(order_id) NOT NULL
+);
+
+CREATE TABLE Reviews 
+(
+    review_id SERIAL PRIMARY KEY NOT NULL,
+    user_id INT REFERENCES Users(user_id) NOT NULL,
+    game_id INT REFERENCES Games(game_id) NOT NULL,
+    rating INT NOT NULL,
+    CHECK (rating BETWEEN 0 AND 5),
+    description VARCHAR(500) NOT NULL
+);
+
+INSERT INTO Categories (name) VALUES
+('Simulator'),
+('Action'),
+('RPG'),
+('Strategy'),
+('Adventure'),
+('Puzzle');
+
+INSERT INTO Publishers (name, description) VALUES
+('EA', 'Мировой лидер в игровой индустрии, известен своими спортивными симуляторами, такими как FIFA, а также широким спектром других популярных игр, включая шутеры Battlefield и ролевые игры Mass Effect.'),
+('Ubisoft', 'Французская компания, славящаяся за создание великолепных открытых мировых игр, таких как Assassins Creed и Far Cry, а также серий Splinter Cell и Watch Dogs.'),
+('Activision Blizzard', 'Гигант игровой индустрии с такими хитами, как Call of Duty, World of Warcraft и Overwatch. Одна из старейших компаний в сфере видеоигр.'),
+('Bethesda', 'Известен своими эпическими ролевыми играми, включая The Elder Scrolls и Fallout. Их игры предлагают огромные открытые миры и глубокий сюжет.'),
+('Rockstar Games', 'Создатели культовых Grand Theft Auto и Red Dead Redemption. Известен за детально проработанные миры и захватывающие истории в играх.');
+
+INSERT INTO Platforms (name) VALUES
+('PC'),
+('Xbox'),
+('PlayStation');
+
+INSERT INTO Games (name, description, publisher_id, category_id, cost) VALUES
+('FIFA 22', 'Футбольный симулятор с реалистичной графикой и улучшенным геймплеем.', (SELECT publisher_id FROM Publishers WHERE name = 'EA'), (SELECT category_id FROM Categories WHERE name = 'Simulator'), 39.99),
+('Assassins Creed Valhalla', 'RPG-приключение, в котором вы играете за викинга и исследуете древнюю Англию.', (SELECT publisher_id FROM Publishers WHERE name = 'Ubisoft'), (SELECT category_id FROM Categories WHERE name = 'Adventure'), 19.99),
+('Call of Duty: Warzone', 'Бесплатный боевой рояль в мире Call of Duty с интенсивными онлайн-сражениями.', (SELECT publisher_id FROM Publishers WHERE name = 'Activision Blizzard'), (SELECT category_id FROM Categories WHERE name = 'Action'), 0.0),
+('The Elder Scrolls V: Skyrim', 'Эпическая RPG с открытым миром, где вы исследуете фэнтезийное королевство.', (SELECT publisher_id FROM Publishers WHERE name = 'Bethesda'), (SELECT category_id FROM Categories WHERE name = 'RPG'), 29.99),
+('Grand Theft Auto V', 'Открытый мир, где вы совершаете ограбления и исследуете фиктивный город Лос-Сантос.', (SELECT publisher_id FROM Publishers WHERE name = 'Rockstar Games'), (SELECT category_id FROM Categories WHERE name = 'Adventure'), 39.99),
+('Mass Effect Legendary Edition', 'Сборник ролевых игр с улучшенной графикой и вселенной научной фантастики.', (SELECT publisher_id FROM Publishers WHERE name = 'EA'), (SELECT category_id FROM Categories WHERE name = 'RPG'), 49.99),
+('Far Cry 6', 'Шутер с открытым миром, вас ожидает борьба с тиранией на тропическом острове.', (SELECT publisher_id FROM Publishers WHERE name = 'Ubisoft'), (SELECT category_id FROM Categories WHERE name = 'Action'), 39.99),
+('Diablo IV', 'RPG с мрачным фэнтезийным миром и борьбой с демонами.', (SELECT publisher_id FROM Publishers WHERE name = 'Activision Blizzard'), (SELECT category_id FROM Categories WHERE name = 'RPG'), 29.99),
+('Fallout 4', 'Постапокалиптическая RPG с элементами выживания и исследования.', (SELECT publisher_id FROM Publishers WHERE name = 'Bethesda'), (SELECT category_id FROM Categories WHERE name = 'RPG'), 9.99),
+('Red Dead Redemption 2', 'Вестерн с ошеломляющей графикой, где вы отправляетесь в путешествие в конце 19-го века.', (SELECT publisher_id FROM Publishers WHERE name = 'Rockstar Games'), (SELECT category_id FROM Categories WHERE name = 'Simulator'), 39.99);
+
+INSERT INTO Roles (name) VALUES
+('User'),
+('Admin');
+
+insert into Users (nickname, password, email, role_id, balance) values ('lcolbourn0', '$2a$04$EW4zWKiZAPRdqvz/dqb6K.3qA26GLjsT8ZBAQDpb6JFjDEqGxbVuW', 'tfance0@jalbum.net', 1, 39.59);
+insert into Users (nickname, password, email, role_id, balance) values ('tmccroft1', '$2a$04$PUPWHe6OdiBe63iyJY1M9esrxfexyMDqwgEfqOIwQn9MVE4UwTcri', 'ebattey1@booking.com', 1, 6.01);
+insert into Users (nickname, password, email, role_id, balance) values ('haggott2', '$2a$04$0O9fgMOopSKo5nIgbK4FYukOtGhS55MrBnQNQV4wpC6VDShwozJkC', 'drubens2@i2i.jp', 1, 4.82);
+insert into Users (nickname, password, email, role_id, balance) values ('rgrolmann3', '$2a$04$jjgLBhQBaa7ZScTJtsZKx.96LCPHgxoYblm3iETgE.KzoMMzV5bIi', 'eclemmen3@liveinternet.ru', 1, 38.09);
+insert into Users (nickname, password, email, role_id, balance) values ('vmacklam4', '$2a$04$V/Q98ejholWc59WWu22WG.RHvp9KnCZIWwssqNbvHAvCOPK884pLq', 'deberst4@nifty.com', 1, 87.45);
+insert into Users (nickname, password, email, role_id, balance) values ('zvannozzii5', '$2a$04$M4985O7tBQwhM9gq3sQMtOb0VPecCd5O6PR4UiVfpgIr86nr6Xx4W', 'dellin5@dailymotion.com', 1, 10.13);
+insert into Users (nickname, password, email, role_id, balance) values ('rcreasy6', '$2a$04$uBNelcgZUbgeYtLVj4UdoedTIiYIZlk2MDQ43vphxnnBNmvfk8IKi', 'mfigliovanni6@myspace.com', 1, 67.49);
+insert into Users (nickname, password, email, role_id, balance) values ('ltchir7', '$2a$04$bFkCYx1ZNXor8oYhVf3rf.HzNLbPszFPLi9JYOvlVBaCOv2FnJleG', 'mziems7@statcounter.com', 1, 4.27);
+insert into Users (nickname, password, email, role_id, balance) values ('jnovello8', '$2a$04$lyh9YbopC.RgEipupXkwkeY6TDjNQLf0DuitjGkgk2dv9vphwO1wW', 'bwillder8@cisco.com', 1, 42.43);
+insert into Users (nickname, password, email, role_id, balance) values ('wbahde9', '$2a$04$NAp7qPF/O8EQNdTfwsU8UONZFMek3VYn/bQ1S5shDsTZIcsizzMTe', 'lchalk9@sitemeter.com', 1, 48.88);
+insert into Users (nickname, password, email, role_id, balance) values ('ffussella', '$2a$04$wSnENb5it6GVlhNRL7So0.3CUQM7WUnCjRxaByFkuQ.yzZRCFXNSm', 'gcallena@princeton.edu', 1, 84.91);
+insert into Users (nickname, password, email, role_id, balance) values ('clawmanb', '$2a$04$iLWdN72.v/Y7CUyuKUGgv.iosFV6unKvko9cVvGYPLQJJ9Tn6zjsa', 'mmenatb@craigslist.org', 1, 16.03);
+insert into Users (nickname, password, email, role_id, balance) values ('rcaugheyc', '$2a$04$xpSvGGLxe3PoitYQGf7RS.6Iqi4QiqOcrotBO.4hpC8gKTeXgYC6q', 'rmuckeenc@prnewswire.com', 1, 29.03);
+insert into Users (nickname, password, email, role_id, balance) values ('morwelld', '$2a$04$vikADNuesvfv8J2RyrdO.emsr4S4PKAOWr8d2hJOvw65RgrfnJHG6', 'foloned@amazon.de', 1, 80.17);
+insert into Users (nickname, password, email, role_id, balance) values ('thawke', '$2a$04$Io0JG1rYGrWLYK8lWnjXnemJzcHGvG28EJ.7buA0aDsABC0wxuk/m', 'ecrowchee@technorati.com', 1, 26.11);
+insert into Users (nickname, password, email, role_id, balance) values ('rmolloyf', '$2a$04$Y1Uwk09GFKLzIEqOUgALsuLVBcvOxqROr/SLRpfAKw8OENYEelMai', 'ydaelmanf@elegantthemes.com', 1, 64.7);
+insert into Users (nickname, password, email, role_id, balance) values ('bmelliardg', '$2a$04$WRNJmH.8ILrgbpweYKvlcuaX4NOXRh5rCm3oclfiN.6wvKib8RUG.', 'mpefferg@marriott.com', 1, 17.51);
+insert into Users (nickname, password, email, role_id, balance) values ('cskehanh', '$2a$04$b54zy6G1RCp/KZPpGFOXsuFaViQrgPAdntb0zvjK.ICMEeOKhC/3O', 'jgasnellh@cbslocal.com', 1, 23.76);
+insert into Users (nickname, password, email, role_id, balance) values ('dhurnelli', '$2a$04$CWh9fdT.1yJvW4MLqReqJ.v8PS/u4isRXW1hDPXGO8bC5TvDQJg76', 'acokei@washington.edu', 1, 2.45);
+insert into Users (nickname, password, email, role_id, balance) values ('bhendersonj', '$2a$04$GGxf.6ugg6ter/YSHTLU8e16ZG5c9sQdY569ouR47Jk5AjAUzNGNW', 'abriddenj@taobao.com', 1, 58.56);
+
+
+INSERT INTO Platforms_Games (game_id, platform_id) VALUES
+((SELECT game_id FROM Games WHERE name = 'FIFA 22'), (SELECT platform_id FROM Platforms WHERE name = 'PC')),
+((SELECT game_id FROM Games WHERE name = 'FIFA 22'), (SELECT platform_id FROM Platforms WHERE name = 'Xbox')),
+((SELECT game_id FROM Games WHERE name = 'FIFA 22'), (SELECT platform_id FROM Platforms WHERE name = 'PlayStation')),
+((SELECT game_id FROM Games WHERE name = 'Call of Duty: Warzone'), (SELECT platform_id FROM Platforms WHERE name = 'PC')),
+((SELECT game_id FROM Games WHERE name = 'Call of Duty: Warzone'), (SELECT platform_id FROM Platforms WHERE name = 'Xbox')),
+((SELECT game_id FROM Games WHERE name = 'Call of Duty: Warzone'), (SELECT platform_id FROM Platforms WHERE name = 'PlayStation')),
+((SELECT game_id FROM Games WHERE name = 'Grand Theft Auto V'), (SELECT platform_id FROM Platforms WHERE name = 'PC')),
+((SELECT game_id FROM Games WHERE name = 'Grand Theft Auto V'), (SELECT platform_id FROM Platforms WHERE name = 'Xbox')),
+((SELECT game_id FROM Games WHERE name = 'Grand Theft Auto V'), (SELECT platform_id FROM Platforms WHERE name = 'PlayStation')),
+((SELECT game_id FROM Games WHERE name = 'Red Dead Redemption 2'), (SELECT platform_id FROM Platforms WHERE name = 'PC')),
+((SELECT game_id FROM Games WHERE name = 'Red Dead Redemption 2'), (SELECT platform_id FROM Platforms WHERE name = 'Xbox')),
+((SELECT game_id FROM Games WHERE name = 'Red Dead Redemption 2'), (SELECT platform_id FROM Platforms WHERE name = 'PlayStation')),
+((SELECT game_id FROM Games WHERE name = 'Assassins Creed Valhalla'), (SELECT platform_id FROM Platforms WHERE name = 'PC')),
+((SELECT game_id FROM Games WHERE name = 'The Elder Scrolls V: Skyrim'), (SELECT platform_id FROM Platforms WHERE name = 'PC')),
+((SELECT game_id FROM Games WHERE name = 'Mass Effect Legendary Edition'), (SELECT platform_id FROM Platforms WHERE name = 'PC')),
+((SELECT game_id FROM Games WHERE name = 'Far Cry 6'), (SELECT platform_id FROM Platforms WHERE name = 'PC')),
+((SELECT game_id FROM Games WHERE name = 'Fallout 4'), (SELECT platform_id FROM Platforms WHERE name = 'PC'));
