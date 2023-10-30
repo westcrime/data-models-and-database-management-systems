@@ -181,3 +181,51 @@ INSERT INTO Platforms_Games (game_id, platform_id) VALUES
 ((SELECT game_id FROM Games WHERE name = 'Mass Effect Legendary Edition'), (SELECT platform_id FROM Platforms WHERE name = 'PC')),
 ((SELECT game_id FROM Games WHERE name = 'Far Cry 6'), (SELECT platform_id FROM Platforms WHERE name = 'PC')),
 ((SELECT game_id FROM Games WHERE name = 'Fallout 4'), (SELECT platform_id FROM Platforms WHERE name = 'PC'));
+
+INSERT INTO Reviews (user_id, rating, description, game_id) VALUES
+(1, 4, 'Very cool game!', (SELECT game_id FROM Games WHERE name = 'FIFA 22')),
+(1, 5, 'Masterpiece!', (SELECT game_id FROM Games WHERE name = 'Red Dead Redemption 2')),
+(2, 3, 'Good.', (SELECT game_id FROM Games WHERE name = 'Call of Duty: Warzone')),
+(5, 4, 'Nice open world!', (SELECT game_id FROM Games WHERE name = 'The Elder Scrolls V: Skyrim')),
+(7, 2, 'Very bad product.', (SELECT game_id FROM Games WHERE name = 'FIFA 22')),
+(7, 5, 'Masterpiece!', (SELECT game_id FROM Games WHERE name = 'Fallout 4')),
+(15, 5, 'Waste of money and time!', (SELECT game_id FROM Games WHERE name = 'Assassins Creed Valhalla'));
+
+INSERT INTO Libraries (game_id, user_id) VALUES
+((SELECT game_id FROM Games WHERE name = 'FIFA 22'), 1),
+((SELECT game_id FROM Games WHERE name = 'FIFA 22'), 2),
+((SELECT game_id FROM Games WHERE name = 'FIFA 22'), 3),
+((SELECT game_id FROM Games WHERE name = 'Call of Duty: Warzone'), 15),
+((SELECT game_id FROM Games WHERE name = 'Red Dead Redemption 2'), 15),
+((SELECT game_id FROM Games WHERE name = 'Fallout 4'), 15);
+
+INSERT INTO Carts (game_id, user_id) VALUES
+((SELECT game_id FROM Games WHERE name = 'FIFA 22'), 5),
+((SELECT game_id FROM Games WHERE name = 'FIFA 22'), 6),
+((SELECT game_id FROM Games WHERE name = 'FIFA 22'), 9),
+((SELECT game_id FROM Games WHERE name = 'Call of Duty: Warzone'), 16),
+((SELECT game_id FROM Games WHERE name = 'Red Dead Redemption 2'), 16),
+((SELECT game_id FROM Games WHERE name = 'Fallout 4'), 16);
+
+INSERT INTO Orders (user_id, order_date, status, amount) VALUES
+(1, (SELECT CURRENT_DATE), 'Заказ не сформирован', 0.0),
+(2, (SELECT CURRENT_DATE), 'Заказ не сформирован', 0.0),
+(11, (SELECT CURRENT_DATE), 'Заказ не сформирован', 0.0);
+
+INSERT INTO Orders_Games (game_id, order_id) VALUES
+(1, (SELECT order_id FROM Orders WHERE user_id = 11)),
+(3, (SELECT order_id FROM Orders WHERE user_id = 11));
+
+
+UPDATE Orders
+SET amount = (
+    SELECT SUM(Games.cost)
+    FROM Orders_Games
+    JOIN Games ON Orders_Games.game_id = Games.game_id
+    WHERE Orders_Games.order_id = Orders.order_id
+)
+WHERE user_id = 11;
+
+UPDATE Orders
+SET status = 'Заказ ждет оплаты'
+WHERE user_id = 11;

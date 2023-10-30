@@ -550,3 +550,287 @@ INSERT INTO Platforms_Games (game_id, platform_id) VALUES
 ((SELECT game_id FROM Games WHERE name = 'Fallout 4'), (SELECT platform_id FROM Platforms WHERE name = 'PC'));
 **************************
 
+********* ЗАПРОС *********
+INSERT INTO Reviews (user_id, rating, description, game_id) VALUES
+(1, 4, 'Very cool game!', (SELECT game_id FROM Games WHERE name = 'FIFA 22')),
+(1, 5, 'Masterpiece!', (SELECT game_id FROM Games WHERE name = 'Red Dead Redemption 2')),
+(2, 3, 'Good.', (SELECT game_id FROM Games WHERE name = 'Call of Duty: Warzone')),
+(5, 4, 'Nice open world!', (SELECT game_id FROM Games WHERE name = 'The Elder Scrolls V: Skyrim')),
+(7, 2, 'Very bad product.', (SELECT game_id FROM Games WHERE name = 'FIFA 22')),
+(7, 5, 'Masterpiece!', (SELECT game_id FROM Games WHERE name = 'Fallout 4')),
+(15, 5, 'Waste of money and time!', (SELECT game_id FROM Games WHERE name = 'Assassins Creed Valhalla'));
+**************************
+
+INSERT 0 7
+********* ЗАПРОС *********
+select * from reviews
+;
+**************************
+
+ review_id | user_id | game_id | rating |       description        
+-----------+---------+---------+--------+--------------------------
+         1 |       1 |       1 |      4 | Very cool game!
+         2 |       1 |      10 |      5 | Masterpiece!
+         3 |       2 |       3 |      3 | Good.
+         4 |       5 |       4 |      4 | Nice open world!
+         5 |       7 |       1 |      2 | Very bad product.
+         6 |       7 |       9 |      5 | Masterpiece!
+         7 |      15 |       2 |      5 | Waste of money and time!
+(7 строк)
+
+********* ЗАПРОС *********
+INSERT INTO Reviews (user_id, rating, description, game_id) VALUES
+(1, 6, 'Very cool game!', (SELECT game_id FROM Games WHERE name = 'FIFA 22'));
+**************************
+
+********* ЗАПРОС *********
+ALTER TABLE Libraries add CONSTRAINT unique_library_entry UNIQUE (game_id, user_id)
+;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+ALTER TABLE Carts add CONSTRAINT unique_cart_entry UNIQUE (game_id, user_id)
+;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+INSERT INTO Libraries (game_id, user_id) VALUES
+((SELECT game_id FROM Games WHERE name = 'FIFA 22'), 1),
+((SELECT game_id FROM Games WHERE name = 'FIFA 22'), 2),
+((SELECT game_id FROM Games WHERE name = 'FIFA 22'), 3),
+((SELECT game_id FROM Games WHERE name = 'Call of Duty: Warzone'), 15),
+((SELECT game_id FROM Games WHERE name = 'Red Dead Redemption 2'), 15),
+((SELECT game_id FROM Games WHERE name = 'Fallout 4'), 15);
+**************************
+
+INSERT 0 6
+********* ЗАПРОС *********
+INSERT INTO Carts (game_id, user_id) VALUES
+((SELECT game_id FROM Games WHERE name = 'FIFA 22'), 5),
+((SELECT game_id FROM Games WHERE name = 'FIFA 22'), 6),
+((SELECT game_id FROM Games WHERE name = 'FIFA 22'), 9),
+((SELECT game_id FROM Games WHERE name = 'Call of Duty: Warzone'), 16),
+((SELECT game_id FROM Games WHERE name = 'Red Dead Redemption 2'), 16),
+((SELECT game_id FROM Games WHERE name = 'Fallout 4'), 16);
+**************************
+
+INSERT 0 6
+********* ЗАПРОС *********
+INSERT INTO Orders (user_id, order_date, status) VALUES
+(1, (SELECT CURRENT_DATE), 'Заказ не сформирован'),
+(2, (SELECT CURRENT_DATE), 'Заказ не сформирован'),
+(11, (SELECT CURRENT_DATE), 'Заказ ждет оплаты');
+**************************
+
+********* ЗАПРОС *********
+UPDATE Orders
+SET amount = (
+    SELECT SUM(Games.cost)
+    FROM Orders_Games
+    JOIN Games ON Orders_Games.game_id = Games.game_id
+    WHERE Orders_Games.order_id = Orders.order_id
+)
+WHERE user_id = 1;
+**************************
+
+UPDATE 0
+********* ЗАПРОС *********
+INSERT INTO Orders (user_id, order_date, status, amount) VALUES
+(1, (SELECT CURRENT_DATE), 'Заказ не сформирован', 0),
+(2, (SELECT CURRENT_DATE), 'Заказ не сформирован', 0),
+(11, (SELECT CURRENT_DATE), 'Заказ не сформирован', 0);
+**************************
+
+INSERT 0 3
+********* ЗАПРОС *********
+INSERT INTO Orders_Games (game_id, order_id) VALUE 
+(1, (SELECT order_id FROM Orders WHERE user_id = 11)),
+(3, (SELECT order_id FROM Orders WHERE user_id = 11));
+**************************
+
+********* ЗАПРОС *********
+INSERT INTO Orders_Games (game_id, order_id) VALUES 
+(1, (SELECT order_id FROM Orders WHERE user_id = 11)),
+(3, (SELECT order_id FROM Orders WHERE user_id = 11));
+**************************
+
+INSERT 0 2
+********* ЗАПРОС *********
+UPDATE Orders
+SET amount = (
+    SELECT SUM(Games.cost)
+    FROM Orders_Games
+    JOIN Games ON Orders_Games.game_id = Games.game_id
+    WHERE Orders_Games.order_id = Orders.order_id
+)
+WHERE user_id = 1;
+**************************
+
+********* ЗАПРОС *********
+select * from orders
+;
+**************************
+
+ order_id | user_id | order_date |        status        | amount 
+----------+---------+------------+----------------------+--------
+        2 |       1 | 2023-10-30 | Заказ не сформирован |      0
+        3 |       2 | 2023-10-30 | Заказ не сформирован |      0
+        4 |      11 | 2023-10-30 | Заказ не сформирован |      0
+(3 строки)
+
+********* ЗАПРОС *********
+Delete * from orders
+;
+**************************
+
+********* ЗАПРОС *********
+Delete from orders
+;
+**************************
+
+********* ЗАПРОС *********
+delete from orders_games
+;
+**************************
+
+DELETE 2
+********* ЗАПРОС *********
+Delete from orders
+;
+**************************
+
+DELETE 3
+********* ЗАПРОС *********
+INSERT INTO Orders (user_id, order_date, status, amount) VALUES
+(1, (SELECT CURRENT_DATE), 'Заказ не сформирован', 0.0),
+(2, (SELECT CURRENT_DATE), 'Заказ не сформирован', 0.0),
+(11, (SELECT CURRENT_DATE), 'Заказ не сформирован', 0.0);
+**************************
+
+INSERT 0 3
+********* ЗАПРОС *********
+INSERT INTO Orders_Games (game_id, order_id) VALUES
+(1, (SELECT order_id FROM Orders WHERE user_id = 11)),
+(3, (SELECT order_id FROM Orders WHERE user_id = 11));
+**************************
+
+INSERT 0 2
+********* ЗАПРОС *********
+UPDATE Orders
+SET amount = (
+    SELECT SUM(Games.cost)
+    FROM Orders_Games
+    JOIN Games ON Orders_Games.game_id = Games.game_id
+    WHERE Orders_Games.order_id = Orders.order_id
+)
+WHERE user_id = 1;
+**************************
+
+********* ЗАПРОС *********
+alter table orders alter column amount type decimal
+;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+UPDATE Orders
+SET amount = (
+    SELECT SUM(Games.cost)
+    FROM Orders_Games
+    JOIN Games ON Orders_Games.game_id = Games.game_id
+    WHERE Orders_Games.order_id = Orders.order_id
+)
+WHERE user_id = 1;
+**************************
+
+********* ЗАПРОС *********
+alter table orders alter column amount drop not null
+;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+UPDATE Orders
+SET amount = (
+    SELECT SUM(Games.cost)
+    FROM Orders_Games
+    JOIN Games ON Orders_Games.game_id = Games.game_id
+    WHERE Orders_Games.order_id = Orders.order_id
+)
+WHERE user_id = 1;
+**************************
+
+UPDATE 1
+********* ЗАПРОС *********
+select * from orders
+;
+**************************
+
+ order_id | user_id | order_date |        status        | amount 
+----------+---------+------------+----------------------+--------
+        6 |       2 | 2023-10-30 | Заказ не сформирован |    0.0
+        7 |      11 | 2023-10-30 | Заказ не сформирован |    0.0
+        5 |       1 | 2023-10-30 | Заказ не сформирован |       
+(3 строки)
+
+********* ЗАПРОС *********
+select * from orders_games;
+**************************
+
+ game_id | order_id 
+---------+----------
+       1 |        7
+       3 |        7
+(2 строки)
+
+********* ЗАПРОС *********
+UPDATE Orders
+SET amount = (
+    SELECT SUM(Games.cost)
+    FROM Orders_Games
+    JOIN Games ON Orders_Games.game_id = Games.game_id
+    WHERE Orders_Games.order_id = Orders.order_id
+)
+WHERE user_id = 11;
+**************************
+
+UPDATE 1
+********* ЗАПРОС *********
+select * from orders
+;
+**************************
+
+ order_id | user_id | order_date |        status        | amount 
+----------+---------+------------+----------------------+--------
+        6 |       2 | 2023-10-30 | Заказ не сформирован |    0.0
+        5 |       1 | 2023-10-30 | Заказ не сформирован |       
+        7 |      11 | 2023-10-30 | Заказ не сформирован |  39.99
+(3 строки)
+
+********* ЗАПРОС *********
+select * from games
+;
+**************************
+
+ game_id |             name              |                                       description                                       | publisher_id | category_id | cost  | picture_path 
+---------+-------------------------------+-----------------------------------------------------------------------------------------+--------------+-------------+-------+--------------
+       1 | FIFA 22                       | Футбольный симулятор с реалистичной графикой и улучшенным геймплеем.                    |            1 |           6 | 39.99 | 
+       2 | Assassins Creed Valhalla      | RPG-приключение, в котором вы играете за викинга и исследуете древнюю Англию.           |            2 |           4 | 19.99 | 
+       3 | Call of Duty: Warzone         | Бесплатный боевой рояль в мире Call of Duty с интенсивными онлайн-сражениями.           |            3 |           1 |   0.0 | 
+       4 | The Elder Scrolls V: Skyrim   | Эпическая RPG с открытым миром, где вы исследуете фэнтезийное королевство.              |            4 |           2 | 29.99 | 
+       5 | Grand Theft Auto V            | Открытый мир, где вы совершаете ограбления и исследуете фиктивный город Лос-Сантос.     |            5 |           4 | 39.99 | 
+       6 | Mass Effect Legendary Edition | Сборник ролевых игр с улучшенной графикой и вселенной научной фантастики.               |            1 |           2 | 49.99 | 
+       7 | Far Cry 6                     | Шутер с открытым миром, вас ожидает борьба с тиранией на тропическом острове.           |            2 |           1 | 39.99 | 
+       8 | Diablo IV                     | RPG с мрачным фэнтезийным миром и борьбой с демонами.                                   |            3 |           2 | 29.99 | 
+       9 | Fallout 4                     | Постапокалиптическая RPG с элементами выживания и исследования.                         |            4 |           2 |  9.99 | 
+      10 | Red Dead Redemption 2         | Вестерн с ошеломляющей графикой, где вы отправляетесь в путешествие в конце 19-го века. |            5 |           6 | 39.99 | 
+(10 строк)
+
+********* ЗАПРОС *********
+UPDATE Orders
+SET status = 'Заказ ждет оплаты'
+WHERE user_id = 11;
+**************************
+
