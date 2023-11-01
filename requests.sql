@@ -207,16 +207,28 @@ INSERT INTO Carts (game_id, user_id) VALUES
 ((SELECT game_id FROM Games WHERE name = 'Red Dead Redemption 2'), 16),
 ((SELECT game_id FROM Games WHERE name = 'Fallout 4'), 16);
 
+-- Добавление пустого заказа
 INSERT INTO Orders (user_id, order_date, status, amount) VALUES
 (1, (SELECT CURRENT_DATE), 'Заказ не сформирован', 0.0),
 (2, (SELECT CURRENT_DATE), 'Заказ не сформирован', 0.0),
 (11, (SELECT CURRENT_DATE), 'Заказ не сформирован', 0.0);
 
+-- Получаем список всех заказов
+SELECT * FROM Orders;
+
+-- Заполнение определнного заказа играми
 INSERT INTO Orders_Games (game_id, order_id) VALUES
-(1, (SELECT order_id FROM Orders WHERE user_id = 11)),
-(3, (SELECT order_id FROM Orders WHERE user_id = 11));
+((SELECT game_id FROM Games WHERE name = 'FIFA 22'), 8),
+((SELECT game_id FROM Games WHERE name = 'allout 4'), 8);
 
+-- Вывод пользователей и общая стоимость их заказов
+SELECT u.nickname, SUM(g.cost) AS total_cost FROM Users u
+LEFT JOIN Orders o ON u.user_id = o.user_id
+LEFT JOIN Orders_Games og ON og.order_id = o.order_id
+LEFT JOIN Games g ON g.game_id = og.game_id
+GROUP BY u.nickname HAVING sum(g.cost) > 0 ORDER BY total_cost;
 
+-- Обновление заказа на сумму выбранных игр
 UPDATE Orders
 SET amount = (
     SELECT SUM(Games.cost)
@@ -224,8 +236,20 @@ SET amount = (
     JOIN Games ON Orders_Games.game_id = Games.game_id
     WHERE Orders_Games.order_id = Orders.order_id
 )
-WHERE user_id = 11;
+WHERE order_id = 8;
 
+-- Обновление статуса заказа
 UPDATE Orders
 SET status = 'Заказ ждет оплаты'
-WHERE user_id = 11;
+WHERE order_id = 8;
+
+-- Получение игр в заказе
+SELECT * FROM Orders WHERE 
+order_id = 8;
+SELECT game_id FROM Orders_Games WHERE
+order_id = 8;
+
+-- Удаление заказа
+DELETE FROM Orders WHERE
+order_id = 8;
+SELECT * FROM GAMES WHERE publisher_name = 'EA' OR publisher_name = 'Ubisoft'

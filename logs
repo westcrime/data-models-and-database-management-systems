@@ -834,3 +834,620 @@ SET status = 'Заказ ждет оплаты'
 WHERE user_id = 11;
 **************************
 
+********* ЗАПРОС *********
+ALTER TABLE Users ALTER COLUMN role_id SET ON DELETE CASCADE;
+**************************
+
+********* ЗАПРОС *********
+select * from roles
+;
+**************************
+
+ role_id | name  
+---------+-------
+       1 | User
+       2 | Admin
+(2 строки)
+
+********* ЗАПРОС *********
+SELECT conname AS constraint_name, confrelid::regclass AS table_name, attname AS column_name, confupdtype AS update_action, confdeltype AS delete_action
+FROM pg_constraint
+JOIN pg_attribute ON attrelid = confrelid AND attnum = ANY(confkey)
+WHERE confrelid = 'users'::regclass;
+**************************
+
+    constraint_name     | table_name | column_name | update_action | delete_action 
+------------------------+------------+-------------+---------------+---------------
+ wishlists_user_id_fkey | users      | user_id     | a             | a
+ libraries_user_id_fkey | users      | user_id     | a             | a
+ user_logs_user_id_fkey | users      | user_id     | a             | a
+ payments_user_id_fkey  | users      | user_id     | a             | a
+ orders_user_id_fkey    | users      | user_id     | a             | a
+ reviews_user_id_fkey   | users      | user_id     | a             | a
+(6 строк)
+
+********* ЗАПРОС *********
+alter table users
+drop constraint role_id,
+add constraint role_id
+   foreign key (role_id)
+   references roles(role_id)
+   on delete cascade;
+**************************
+
+********* ЗАПРОС *********
+add constraint role_id
+   foreign key (role_id)
+   references roles(role_id)
+   on delete cascade;
+**************************
+
+********* ЗАПРОС *********
+alter table
+add constraint role_id
+   foreign key (role_id)
+   references roles(role_id)
+   on delete cascade;
+**************************
+
+********* ЗАПРОС *********
+alter table users
+add constraint role_id
+   foreign key (role_id)
+   references roles(role_id)
+   on delete cascade;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+select * from users
+;
+**************************
+
+ user_id |  nickname   |                           password                           |            email            | role_id | profile_pic_path | balance 
+---------+-------------+--------------------------------------------------------------+-----------------------------+---------+------------------+---------
+       1 | lcolbourn0  | $2a$04$EW4zWKiZAPRdqvz/dqb6K.3qA26GLjsT8ZBAQDpb6JFjDEqGxbVuW | tfance0@jalbum.net          |       1 |                  |   39.59
+       2 | tmccroft1   | $2a$04$PUPWHe6OdiBe63iyJY1M9esrxfexyMDqwgEfqOIwQn9MVE4UwTcri | ebattey1@booking.com        |       1 |                  |    6.01
+       3 | haggott2    | $2a$04$0O9fgMOopSKo5nIgbK4FYukOtGhS55MrBnQNQV4wpC6VDShwozJkC | drubens2@i2i.jp             |       1 |                  |    4.82
+       4 | rgrolmann3  | $2a$04$jjgLBhQBaa7ZScTJtsZKx.96LCPHgxoYblm3iETgE.KzoMMzV5bIi | eclemmen3@liveinternet.ru   |       1 |                  |   38.09
+       5 | vmacklam4   | $2a$04$V/Q98ejholWc59WWu22WG.RHvp9KnCZIWwssqNbvHAvCOPK884pLq | deberst4@nifty.com          |       1 |                  |   87.45
+       6 | zvannozzii5 | $2a$04$M4985O7tBQwhM9gq3sQMtOb0VPecCd5O6PR4UiVfpgIr86nr6Xx4W | dellin5@dailymotion.com     |       1 |                  |   10.13
+       7 | rcreasy6    | $2a$04$uBNelcgZUbgeYtLVj4UdoedTIiYIZlk2MDQ43vphxnnBNmvfk8IKi | mfigliovanni6@myspace.com   |       1 |                  |   67.49
+       8 | ltchir7     | $2a$04$bFkCYx1ZNXor8oYhVf3rf.HzNLbPszFPLi9JYOvlVBaCOv2FnJleG | mziems7@statcounter.com     |       1 |                  |    4.27
+       9 | jnovello8   | $2a$04$lyh9YbopC.RgEipupXkwkeY6TDjNQLf0DuitjGkgk2dv9vphwO1wW | bwillder8@cisco.com         |       1 |                  |   42.43
+      10 | wbahde9     | $2a$04$NAp7qPF/O8EQNdTfwsU8UONZFMek3VYn/bQ1S5shDsTZIcsizzMTe | lchalk9@sitemeter.com       |       1 |                  |   48.88
+      11 | ffussella   | $2a$04$wSnENb5it6GVlhNRL7So0.3CUQM7WUnCjRxaByFkuQ.yzZRCFXNSm | gcallena@princeton.edu      |       1 |                  |   84.91
+      12 | clawmanb    | $2a$04$iLWdN72.v/Y7CUyuKUGgv.iosFV6unKvko9cVvGYPLQJJ9Tn6zjsa | mmenatb@craigslist.org      |       1 |                  |   16.03
+      13 | rcaugheyc   | $2a$04$xpSvGGLxe3PoitYQGf7RS.6Iqi4QiqOcrotBO.4hpC8gKTeXgYC6q | rmuckeenc@prnewswire.com    |       1 |                  |   29.03
+      14 | morwelld    | $2a$04$vikADNuesvfv8J2RyrdO.emsr4S4PKAOWr8d2hJOvw65RgrfnJHG6 | foloned@amazon.de           |       1 |                  |   80.17
+      15 | thawke      | $2a$04$Io0JG1rYGrWLYK8lWnjXnemJzcHGvG28EJ.7buA0aDsABC0wxuk/m | ecrowchee@technorati.com    |       1 |                  |   26.11
+      16 | rmolloyf    | $2a$04$Y1Uwk09GFKLzIEqOUgALsuLVBcvOxqROr/SLRpfAKw8OENYEelMai | ydaelmanf@elegantthemes.com |       1 |                  |    64.7
+      17 | bmelliardg  | $2a$04$WRNJmH.8ILrgbpweYKvlcuaX4NOXRh5rCm3oclfiN.6wvKib8RUG. | mpefferg@marriott.com       |       1 |                  |   17.51
+      18 | cskehanh    | $2a$04$b54zy6G1RCp/KZPpGFOXsuFaViQrgPAdntb0zvjK.ICMEeOKhC/3O | jgasnellh@cbslocal.com      |       1 |                  |   23.76
+      19 | dhurnelli   | $2a$04$CWh9fdT.1yJvW4MLqReqJ.v8PS/u4isRXW1hDPXGO8bC5TvDQJg76 | acokei@washington.edu       |       1 |                  |    2.45
+      20 | bhendersonj | $2a$04$GGxf.6ugg6ter/YSHTLU8e16ZG5c9sQdY569ouR47Jk5AjAUzNGNW | abriddenj@taobao.com        |       1 |                  |   58.56
+(20 строк)
+
+********* ЗАПРОС *********
+alter table reviews
+add constraint game_id
+   foreign key (game_id)
+   references games(game_id)
+   on delete cascade;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+alter table reviews
+add constraint user_id
+   foreign key (user_id)
+   references users(user_id)
+   on delete cascade;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+select * from reviews
+;
+**************************
+
+ review_id | user_id | game_id | rating |       description        
+-----------+---------+---------+--------+--------------------------
+         1 |       1 |       1 |      4 | Very cool game!
+         2 |       1 |      10 |      5 | Masterpiece!
+         3 |       2 |       3 |      3 | Good.
+         4 |       5 |       4 |      4 | Nice open world!
+         5 |       7 |       1 |      2 | Very bad product.
+         6 |       7 |       9 |      5 | Masterpiece!
+         7 |      15 |       2 |      5 | Waste of money and time!
+(7 строк)
+
+********* ЗАПРОС *********
+alter table gamesadd constraint user_id
+   foreign key (user_id)
+   references users(user_id)
+   on delete cascade;
+**************************
+
+********* ЗАПРОС *********
+alter table games add constraint publisher_id
+   foreign key (publisher_id)
+   references publishers(publisher_id)
+   on delete cascade;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+alter table games add constraint category_id
+   foreign key (category_id)
+   references categories(category_id)
+   on delete cascade;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+alter table platforms_games add constraint game_id
+   foreign key (game_id)
+   references games(game_id)
+   on delete cascade;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+alter table platforms_games add constraint platform_id
+   foreign key (platform_id)
+   references platforms(platform_id)
+   on delete cascade;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+alter table carts add constraint game_id
+   foreign key (game_id)
+   references games(game_id)
+   on delete cascade;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+alter table carts add constraint user_id
+   foreign key (user_id)
+   references users(user_id)
+   on delete cascade;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+alter table libraries add constraint game_id
+   foreign key (game_id)
+   references games(game_id)
+   on delete cascade;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+alter table libraries add constraint user_id
+   foreign key (user_id)
+   references users(user_id)
+   on delete cascade;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+alter table payments add constraint user_id
+   foreign key (user_id)
+   references users(user_id)
+   on delete cascade;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+alter table orders add constraint user_id
+   foreign key (user_id)
+   references users(user_id)
+   on delete cascade;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+alter table orders_games add constraint game_id
+   foreign key (game_id)
+   references games(game_id)
+   on delete cascade;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+alter table orders_games add constraint order_id
+   foreign key (order_id)
+   references orders(order_id)
+   on delete cascade;
+**************************
+
+ALTER TABLE
+********* ЗАПРОС *********
+select * from games
+;
+**************************
+
+ game_id |             name              |                                       description                                       | publisher_id | category_id | cost  | picture_path 
+---------+-------------------------------+-----------------------------------------------------------------------------------------+--------------+-------------+-------+--------------
+       1 | FIFA 22                       | Футбольный симулятор с реалистичной графикой и улучшенным геймплеем.                    |            1 |           6 | 39.99 | 
+       2 | Assassins Creed Valhalla      | RPG-приключение, в котором вы играете за викинга и исследуете древнюю Англию.           |            2 |           4 | 19.99 | 
+       3 | Call of Duty: Warzone         | Бесплатный боевой рояль в мире Call of Duty с интенсивными онлайн-сражениями.           |            3 |           1 |   0.0 | 
+       4 | The Elder Scrolls V: Skyrim   | Эпическая RPG с открытым миром, где вы исследуете фэнтезийное королевство.              |            4 |           2 | 29.99 | 
+       5 | Grand Theft Auto V            | Открытый мир, где вы совершаете ограбления и исследуете фиктивный город Лос-Сантос.     |            5 |           4 | 39.99 | 
+       6 | Mass Effect Legendary Edition | Сборник ролевых игр с улучшенной графикой и вселенной научной фантастики.               |            1 |           2 | 49.99 | 
+       7 | Far Cry 6                     | Шутер с открытым миром, вас ожидает борьба с тиранией на тропическом острове.           |            2 |           1 | 39.99 | 
+       8 | Diablo IV                     | RPG с мрачным фэнтезийным миром и борьбой с демонами.                                   |            3 |           2 | 29.99 | 
+       9 | Fallout 4                     | Постапокалиптическая RPG с элементами выживания и исследования.                         |            4 |           2 |  9.99 | 
+      10 | Red Dead Redemption 2         | Вестерн с ошеломляющей графикой, где вы отправляетесь в путешествие в конце 19-го века. |            5 |           6 | 39.99 | 
+(10 строк)
+
+********* ЗАПРОС *********
+SELECT * FROM Orders WHERE 
+order_id = 11;
+**************************
+
+ order_id | user_id | order_date | status | amount 
+----------+---------+------------+--------+--------
+(0 строк)
+
+********* ЗАПРОС *********
+select * from orders
+;
+**************************
+
+ order_id | user_id | order_date |        status        | amount 
+----------+---------+------------+----------------------+--------
+        6 |       2 | 2023-10-30 | Заказ не сформирован |    0.0
+        5 |       1 | 2023-10-30 | Заказ не сформирован |       
+        7 |      11 | 2023-10-30 | Заказ ждет оплаты    |  39.99
+(3 строки)
+
+********* ЗАПРОС *********
+SELECT * FROM Orders WHERE 
+user_id = 11;
+**************************
+
+ order_id | user_id | order_date |      status       | amount 
+----------+---------+------------+-------------------+--------
+        7 |      11 | 2023-10-30 | Заказ ждет оплаты |  39.99
+(1 строка)
+
+********* ЗАПРОС *********
+SELECT game_id FROM Orders_Games WHERE
+user_id = 11;
+**************************
+
+********* ЗАПРОС *********
+SELECT game_id FROM Orders_Games WHERE
+order_id = (SELECT order_id FROM Orders WHERE user_id == 11);
+**************************
+
+********* ЗАПРОС *********
+SELECT game_id FROM Orders_Games WHERE
+order_id = (SELECT order_id FROM Orders WHERE user_id = 11);
+**************************
+
+ game_id 
+---------
+       1
+       3
+(2 строки)
+
+********* ЗАПРОС *********
+INSERT INTO Orders (user_id, order_date, status, amount) VALUES
+(11, (SELECT CURRENT_DATE), 'Заказ не сформирован', 0.0);
+**************************
+
+INSERT 0 1
+********* ЗАПРОС *********
+INSERT INTO Orders_Games (game_id, order_id) VALUES
+(4, (SELECT order_id FROM Orders WHERE user_id = 11)),
+(6, (SELECT order_id FROM Orders WHERE user_id = 11));
+**************************
+
+********* ЗАПРОС *********
+INSERT INTO Orders_Games (game_id, order_id) VALUES
+(4, (SELECT order_id FROM Orders WHERE user_id = 11)),
+(6, 8);
+**************************
+
+********* ЗАПРОС *********
+INSERT INTO Orders_Games (game_id, order_id) VALUES
+(4, 8),
+(6, 8);
+**************************
+
+INSERT 0 2
+********* ЗАПРОС *********
+select * from orders
+;
+**************************
+
+ order_id | user_id | order_date |        status        | amount 
+----------+---------+------------+----------------------+--------
+        6 |       2 | 2023-10-30 | Заказ не сформирован |    0.0
+        5 |       1 | 2023-10-30 | Заказ не сформирован |       
+        7 |      11 | 2023-10-30 | Заказ ждет оплаты    |  39.99
+        8 |      11 | 2023-10-31 | Заказ не сформирован |    0.0
+(4 строки)
+
+********* ЗАПРОС *********
+UPDATE Orders
+SET amount = (
+    SELECT SUM(Games.cost)
+    FROM Orders_Games
+    JOIN Games ON Orders_Games.game_id = Games.game_id
+    WHERE Orders_Games.order_id = Orders.order_id
+)
+WHERE order_id = 8;
+**************************
+
+UPDATE 1
+********* ЗАПРОС *********
+select * from orders
+;
+**************************
+
+ order_id | user_id | order_date |        status        | amount 
+----------+---------+------------+----------------------+--------
+        6 |       2 | 2023-10-30 | Заказ не сформирован |    0.0
+        5 |       1 | 2023-10-30 | Заказ не сформирован |       
+        7 |      11 | 2023-10-30 | Заказ ждет оплаты    |  39.99
+        8 |      11 | 2023-10-31 | Заказ не сформирован |  79.98
+(4 строки)
+
+********* ЗАПРОС *********
+SELECT * FROM Orders WHERE 
+user_id = 11;
+**************************
+
+ order_id | user_id | order_date |        status        | amount 
+----------+---------+------------+----------------------+--------
+        7 |      11 | 2023-10-30 | Заказ ждет оплаты    |  39.99
+        8 |      11 | 2023-10-31 | Заказ не сформирован |  79.98
+(2 строки)
+
+********* ЗАПРОС *********
+SELECT game_id FROM Orders_Games WHERE
+order_id = (SELECT order_id FROM Orders WHERE user_id = 11);
+**************************
+
+********* ЗАПРОС *********
+SELECT * FROM Orders WHERE 
+user_id = 11;
+**************************
+
+ order_id | user_id | order_date |        status        | amount 
+----------+---------+------------+----------------------+--------
+        7 |      11 | 2023-10-30 | Заказ ждет оплаты    |  39.99
+        8 |      11 | 2023-10-31 | Заказ не сформирован |  79.98
+(2 строки)
+
+********* ЗАПРОС *********
+SELECT game_id FROM Orders_Games WHERE
+order_id = 8;
+**************************
+
+ game_id 
+---------
+       4
+       6
+(2 строки)
+
+********* ЗАПРОС *********
+SELECT u.name, o.id FROM Users u
+LEFT JOIN Orders o ON u.user_id = o.user_id
+LEFT JOIN Orders_Games og on og.order_id = o.order_id;
+**************************
+
+********* ЗАПРОС *********
+SELECT u.nickname, o.id FROM Users u
+LEFT JOIN Orders o ON u.user_id = o.user_id
+LEFT JOIN Orders_Games og on og.order_id = o.order_id;
+**************************
+
+********* ЗАПРОС *********
+SELECT u.nickname, o.order_id FROM Users u
+LEFT JOIN Orders o ON u.user_id = o.user_id
+LEFT JOIN Orders_Games og on og.order_id = o.order_id;
+**************************
+
+  nickname   | order_id 
+-------------+----------
+ ffussella   |        7
+ ffussella   |        7
+ ffussella   |        8
+ ffussella   |        8
+ lcolbourn0  |        5
+ tmccroft1   |        6
+ bhendersonj |         
+ bmelliardg  |         
+ clawmanb    |         
+ wbahde9     |         
+ cskehanh    |         
+ thawke      |         
+ rcaugheyc   |         
+ vmacklam4   |         
+ dhurnelli   |         
+ ltchir7     |         
+ zvannozzii5 |         
+ rmolloyf    |         
+ rgrolmann3  |         
+ haggott2    |         
+ morwelld    |         
+ jnovello8   |         
+ rcreasy6    |         
+(23 строки)
+
+********* ЗАПРОС *********
+SELECT u.nickname, o.order_id AS order_id, og.game_id FROM Users u
+LEFT JOIN Orders o ON u.user_id = o.user_id
+LEFT JOIN Orders_Games og on og.order_id = o.order_id;
+**************************
+
+  nickname   | order_id | game_id 
+-------------+----------+---------
+ ffussella   |        7 |       1
+ ffussella   |        7 |       3
+ ffussella   |        8 |       4
+ ffussella   |        8 |       6
+ lcolbourn0  |        5 |        
+ tmccroft1   |        6 |        
+ bhendersonj |          |        
+ bmelliardg  |          |        
+ clawmanb    |          |        
+ wbahde9     |          |        
+ cskehanh    |          |        
+ thawke      |          |        
+ rcaugheyc   |          |        
+ vmacklam4   |          |        
+ dhurnelli   |          |        
+ ltchir7     |          |        
+ zvannozzii5 |          |        
+ rmolloyf    |          |        
+ rgrolmann3  |          |        
+ haggott2    |          |        
+ morwelld    |          |        
+ jnovello8   |          |        
+ rcreasy6    |          |        
+(23 строки)
+
+********* ЗАПРОС *********
+SELECT u.nickname, g.cost FROM Users u
+LEFT JOIN Orders o ON u.user_id = o.user_id
+LEFT JOIN Orders_Games og ON og.order_id = o.order_id
+LEFT JOIN Games g ON g.game_id = og.game_id;
+**************************
+
+  nickname   | cost  
+-------------+-------
+ ffussella   | 39.99
+ ffussella   |   0.0
+ ffussella   | 29.99
+ ffussella   | 49.99
+ lcolbourn0  |      
+ tmccroft1   |      
+ bhendersonj |      
+ bmelliardg  |      
+ clawmanb    |      
+ wbahde9     |      
+ cskehanh    |      
+ thawke      |      
+ rcaugheyc   |      
+ vmacklam4   |      
+ dhurnelli   |      
+ ltchir7     |      
+ zvannozzii5 |      
+ rmolloyf    |      
+ rgrolmann3  |      
+ haggott2    |      
+ morwelld    |      
+ jnovello8   |      
+ rcreasy6    |      
+(23 строки)
+
+********* ЗАПРОС *********
+SELECT u.nickname, SUM(g.cost) FROM Users u
+LEFT JOIN Orders o ON u.user_id = o.user_id
+LEFT JOIN Orders_Games og ON og.order_id = o.order_id
+LEFT JOIN Games g ON g.game_id = og.game_id
+GROUP BY u.nickname;
+**************************
+
+  nickname   |  sum   
+-------------+--------
+ tmccroft1   |       
+ lcolbourn0  |       
+ dhurnelli   |       
+ vmacklam4   |       
+ bmelliardg  |       
+ cskehanh    |       
+ ltchir7     |       
+ rmolloyf    |       
+ morwelld    |       
+ ffussella   | 119.97
+ bhendersonj |       
+ jnovello8   |       
+ thawke      |       
+ clawmanb    |       
+ rgrolmann3  |       
+ zvannozzii5 |       
+ rcaugheyc   |       
+ haggott2    |       
+ wbahde9     |       
+ rcreasy6    |       
+(20 строк)
+
+********* ЗАПРОС *********
+SELECT u.nickname, SUM(g.cost) FROM Users u
+LEFT JOIN Orders o ON u.user_id = o.user_id
+LEFT JOIN Orders_Games og ON og.order_id = o.order_id
+LEFT JOIN Games g ON g.game_id = og.game_id
+GROUP BY u.nickname ORDER BY g.cost DESC HAVING SUM(g.cost) > 0;
+**************************
+
+********* ЗАПРОС *********
+SELECT u.nickname, SUM(g.cost) AS total_cost FROM Users u
+LEFT JOIN Orders o ON u.user_id = o.user_id
+LEFT JOIN Orders_Games og ON og.order_id = o.order_id
+LEFT JOIN Games g ON g.game_id = og.game_id
+GROUP BY u.nickname ORDER BY total_cost DESC HAVING total_cost > 0;
+**************************
+
+********* ЗАПРОС *********
+SELECT u.nickname, SUM(g.cost) AS total_cost FROM Users u
+LEFT JOIN Orders o ON u.user_id = o.user_id
+LEFT JOIN Orders_Games og ON og.order_id = o.order_id
+LEFT JOIN Games g ON g.game_id = og.game_id
+GROUP BY u.nickname ORDER BY total_cost HAVING total_cost > 0;
+**************************
+
+********* ЗАПРОС *********
+SELECT u.nickname, SUM(g.cost) AS total_cost FROM Users u
+LEFT JOIN Orders o ON u.user_id = o.user_id
+LEFT JOIN Orders_Games og ON og.order_id = o.order_id
+LEFT JOIN Games g ON g.game_id = og.game_id
+GROUP BY u.nickname ORDER BY total_cost HAVING sum(g.cost) > 0;
+**************************
+
+********* ЗАПРОС *********
+SELECT u.nickname, SUM(g.cost) AS total_cost FROM Users u
+LEFT JOIN Orders o ON u.user_id = o.user_id
+LEFT JOIN Orders_Games og ON og.order_id = o.order_id
+LEFT JOIN Games g ON g.game_id = og.game_id
+GROUP BY u.nickname HAVING sum(g.cost) > 0  ORDER BY total_cost;
+**************************
+
+ nickname  | total_cost 
+-----------+------------
+ ffussella |     119.97
+(1 строка)
+
+********* ЗАПРОС *********
+SELECT u.nickname, SUM(g.cost) AS total_cost FROM Users u
+LEFT JOIN Orders o ON u.user_id = o.user_id
+LEFT JOIN Orders_Games og ON og.order_id = o.order_id
+LEFT JOIN Games g ON g.game_id = og.game_id
+GROUP BY u.nickname HAVING sum(g.cost) > 0 ORDER BY total_cost;
+**************************
+
+ nickname  | total_cost 
+-----------+------------
+ ffussella |     119.97
+(1 строка)
+
+********* ЗАПРОС *********
+UPDATE Orders
+SET amount = (
+    SELECT SUM(Games.cost)
+    FROM Orders_Games
+    JOIN Games ON Orders_Games.game_id = Games.game_id
+    WHERE Orders_Games.order_id = Orders.order_id
+)
+WHERE order_id = 8;
+**************************
+
+UPDATE 1
