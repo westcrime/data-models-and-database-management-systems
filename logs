@@ -1451,3 +1451,467 @@ WHERE order_id = 8;
 **************************
 
 UPDATE 1
+********* ЗАПРОС *********
+SELECT u.nickname o.order_id
+FROM Users u
+INNER JOIN Orders o
+ON u.user_id = o.user_id;
+**************************
+
+           Список отношений
+ Схема  |  Имя   |   Тип   | Владелец  
+--------+--------+---------+-----------
+ public | orders | таблица | westcrime
+(1 строка)
+
+********* ЗАПРОС *********
+;
+**************************
+
+                Список отношений
+ Схема  |       Имя       |   Тип   | Владелец  
+--------+-----------------+---------+-----------
+ public | carts           | таблица | westcrime
+ public | categories      | таблица | westcrime
+ public | games           | таблица | westcrime
+ public | libraries       | таблица | westcrime
+ public | orders          | таблица | westcrime
+ public | orders_games    | таблица | westcrime
+ public | payments        | таблица | westcrime
+ public | platforms       | таблица | westcrime
+ public | platforms_games | таблица | westcrime
+ public | publishers      | таблица | westcrime
+ public | reviews         | таблица | westcrime
+ public | roles           | таблица | westcrime
+ public | user_logs       | таблица | westcrime
+ public | users           | таблица | westcrime
+(14 строк)
+
+********* ЗАПРОС *********
+Select * from orders
+;
+**************************
+
+ order_id | user_id | order_date |        status        | amount 
+----------+---------+------------+----------------------+--------
+        6 |       2 | 2023-10-30 | Заказ не сформирован |    0.0
+        5 |       1 | 2023-10-30 | Заказ не сформирован |       
+        7 |      11 | 2023-10-30 | Заказ ждет оплаты    |  39.99
+        8 |      11 | 2023-10-31 | Заказ не сформирован |  79.98
+(4 строки)
+
+********* ЗАПРОС *********
+SELECT u.nickname, SUM(g.cost) AS total_cost FROM Users u
+LEFT JOIN Orders o ON u.user_id = o.user_id
+LEFT JOIN Orders_Games og ON og.order_id = o.order_id
+LEFT JOIN Games g ON g.game_id = og.game_id
+GROUP BY u.nickname HAVING sum(g.cost) > 0 ORDER BY total_cost;
+**************************
+
+ nickname  | total_cost 
+-----------+------------
+ ffussella |     119.97
+(1 строка)
+
+********* ЗАПРОС *********
+SELECT u.nickname o.order_id
+FROM Users u
+INNER JOIN Orders o
+ON u.user_id = o.user_id;
+**************************
+
+********* ЗАПРОС *********
+SELECT u.nickname o.user_id
+FROM Users u
+INNER JOIN Orders o
+ON u.user_id = o.user_id;
+**************************
+
+********* ЗАПРОС *********
+SELECT u.nickname Orders.user_id
+FROM Users u
+INNER JOIN Orders
+ON u.user_id = o.user_id;
+**************************
+
+********* ЗАПРОС *********
+SELECT u.nickname, o.user_id
+FROM Users u
+INNER JOIN Orders o
+ON u.user_id = o.user_id;
+**************************
+
+  nickname  | user_id 
+------------+---------
+ tmccroft1  |       2
+ lcolbourn0 |       1
+ ffussella  |      11
+ ffussella  |      11
+(4 строки)
+
+********* ЗАПРОС *********
+SELECT u.nickname, o.order_id
+FROM Users u
+INNER JOIN Orders o
+ON u.user_id = o.user_id;
+**************************
+
+  nickname  | order_id 
+------------+----------
+ tmccroft1  |        6
+ lcolbourn0 |        5
+ ffussella  |        7
+ ffussella  |        8
+(4 строки)
+
+********* ЗАПРОС *********
+SELECT u.nickname, o.order_id
+FROM Users u
+Right JOIN Orders o
+ON u.user_id = o.user_id;
+**************************
+
+  nickname  | order_id 
+------------+----------
+ tmccroft1  |        6
+ lcolbourn0 |        5
+ ffussella  |        7
+ ffussella  |        8
+(4 строки)
+
+********* ЗАПРОС *********
+SELECT name FROM Games
+WHERE publisher_id = (SELECT publisher_id FROM Publishers WHERE publisher_name IN ("EA", "Ubisoft"));
+**************************
+
+********* ЗАПРОС *********
+SELECT name FROM Games
+WHERE publisher_id = (SELECT publisher_id FROM Publishers WHERE name IN ("EA", "Ubisoft"));
+**************************
+
+********* ЗАПРОС *********
+SELECT name FROM Games
+WHERE publisher_id = (SELECT publisher_id FROM Publishers WHERE name IN ('EA', 'Ubisoft'));
+**************************
+
+********* ЗАПРОС *********
+SELECT name FROM Games
+WHERE publisher_id in (SELECT publisher_id FROM Publishers WHERE name IN ('EA', 'Ubisoft'));
+**************************
+
+             name              
+-------------------------------
+ FIFA 22
+ Assassins Creed Valhalla
+ Mass Effect Legendary Edition
+ Far Cry 6
+(4 строки)
+
+********* ЗАПРОС *********
+SELECT nickname, COUNT(l.game_id) FROM Users u
+LEFT JOIN Libraries l ON u.user_id = l.user_id;
+**************************
+
+********* ЗАПРОС *********
+SELECT u.nickname, COUNT(l.game_id) FROM Users u
+LEFT JOIN Libraries l ON u.user_id = l.user_id;
+**************************
+
+********* ЗАПРОС *********
+SELECT COUNT(u.nickname), COUNT(l.game_id) FROM Users u
+LEFT JOIN Libraries l ON u.user_id = l.user_id;
+**************************
+
+ count | count 
+-------+-------
+    22 |     6
+(1 строка)
+
+********* ЗАПРОС *********
+SELECT u.nickname, COUNT(l.game_id) AS count_of_games FROM Users u
+LEFT JOIN Libraries l ON u.user_id = l.user_id
+GROUP BY u.nickname HAVING COUNT(l.game_id > 0) ORDER BY count_of_games;
+**************************
+
+********* ЗАПРОС *********
+SELECT u.nickname, COUNT(l.game_id) AS count_of_games FROM Users u
+LEFT JOIN Libraries l ON u.user_id = l.user_id
+GROUP BY u.nickname HAVING COUNT(l.game_id) > 0 ORDER BY count_of_games;
+**************************
+
+  nickname  | count_of_games 
+------------+----------------
+ tmccroft1  |              1
+ lcolbourn0 |              1
+ haggott2   |              1
+ thawke     |              3
+(4 строки)
+
+********* ЗАПРОС *********
+SELECT g.name, COUNT(l.game_id) AS copies_sold FROM Games g
+LEFT JOIN Libraries l ON g.game_id = l.game_id
+GROUP BY g.name HAVING COUNT(l.game_id) > 0 ORDER BY copies_sold;
+**************************
+
+         name          | copies_sold 
+-----------------------+-------------
+ Fallout 4             |           1
+ Red Dead Redemption 2 |           1
+ Call of Duty: Warzone |           1
+ FIFA 22               |           3
+(4 строки)
+
+********* ЗАПРОС *********
+SELECT g.name, COUNT(l.game_id) AS copies_sold FROM Games g
+LEFT JOIN Libraries l ON g.game_id = l.game_id
+GROUP BY g.name ORDER BY copies_sold;
+**************************
+
+             name              | copies_sold 
+-------------------------------+-------------
+ Assassins Creed Valhalla      |           0
+ Diablo IV                     |           0
+ Mass Effect Legendary Edition |           0
+ Far Cry 6                     |           0
+ Grand Theft Auto V            |           0
+ The Elder Scrolls V: Skyrim   |           0
+ Call of Duty: Warzone         |           1
+ Red Dead Redemption 2         |           1
+ Fallout 4                     |           1
+ FIFA 22                       |           3
+(10 строк)
+
+********* ЗАПРОС *********
+SELECT name, cost, publisher_id, SUM(cost) OVER (PARTITION BY publisher_id) AS 'cost_of_games_from_unique_publisher'
+FROM Games;
+**************************
+
+********* ЗАПРОС *********
+SELECT name, cost, publisher_id, SUM(cost) OVER (PARTITION BY publisher_id) AS cost_of_games_from_unique_publisher 
+FROM Games;
+**************************
+
+             name              | cost  | publisher_id | cost_of_games_from_unique_publisher 
+-------------------------------+-------+--------------+-------------------------------------
+ FIFA 22                       | 39.99 |            1 |                               89.98
+ Mass Effect Legendary Edition | 49.99 |            1 |                               89.98
+ Assassins Creed Valhalla      | 19.99 |            2 |                               59.98
+ Far Cry 6                     | 39.99 |            2 |                               59.98
+ Call of Duty: Warzone         |   0.0 |            3 |                               29.99
+ Diablo IV                     | 29.99 |            3 |                               29.99
+ Fallout 4                     |  9.99 |            4 |                               39.98
+ The Elder Scrolls V: Skyrim   | 29.99 |            4 |                               39.98
+ Grand Theft Auto V            | 39.99 |            5 |                               79.98
+ Red Dead Redemption 2         | 39.99 |            5 |                               79.98
+(10 строк)
+
+********* ЗАПРОС *********
+SELECT name, cost, publisher_id, SUM(cost) OVER (PARTITION BY publisher_id ORDER BY publisher_id) AS cost_of_games_from_unique_publisher 
+FROM Games;
+**************************
+
+             name              | cost  | publisher_id | cost_of_games_from_unique_publisher 
+-------------------------------+-------+--------------+-------------------------------------
+ FIFA 22                       | 39.99 |            1 |                               89.98
+ Mass Effect Legendary Edition | 49.99 |            1 |                               89.98
+ Assassins Creed Valhalla      | 19.99 |            2 |                               59.98
+ Far Cry 6                     | 39.99 |            2 |                               59.98
+ Call of Duty: Warzone         |   0.0 |            3 |                               29.99
+ Diablo IV                     | 29.99 |            3 |                               29.99
+ Fallout 4                     |  9.99 |            4 |                               39.98
+ The Elder Scrolls V: Skyrim   | 29.99 |            4 |                               39.98
+ Grand Theft Auto V            | 39.99 |            5 |                               79.98
+ Red Dead Redemption 2         | 39.99 |            5 |                               79.98
+(10 строк)
+
+********* ЗАПРОС *********
+SELECT name, cost, publisher_id, MAX(cost) OVER (PARTITION BY publisher_id ORDER BY publisher_id) AS largest_cost_of_most_exp_game 
+FROM Games;
+**************************
+
+             name              | cost  | publisher_id | largest_cost_of_most_exp_game 
+-------------------------------+-------+--------------+-------------------------------
+ FIFA 22                       | 39.99 |            1 |                         49.99
+ Mass Effect Legendary Edition | 49.99 |            1 |                         49.99
+ Assassins Creed Valhalla      | 19.99 |            2 |                         39.99
+ Far Cry 6                     | 39.99 |            2 |                         39.99
+ Call of Duty: Warzone         |   0.0 |            3 |                         29.99
+ Diablo IV                     | 29.99 |            3 |                         29.99
+ Fallout 4                     |  9.99 |            4 |                         29.99
+ The Elder Scrolls V: Skyrim   | 29.99 |            4 |                         29.99
+ Grand Theft Auto V            | 39.99 |            5 |                         39.99
+ Red Dead Redemption 2         | 39.99 |            5 |                         39.99
+(10 строк)
+
+********* ЗАПРОС *********
+SELECT publisher_id, MAX(cost) OVER (PARTITION BY publisher_id ORDER BY publisher_id) AS largest_cost_of_most_exp_game 
+FROM Games GROUP BY publisher_id;
+**************************
+
+********* ЗАПРОС *********
+SELECT name, cost, publisher_id, COUNT(game_id) OVER (PARTITION BY publisher_id ORDER BY name) AS number_of_games_from_this_publisher 
+FROM Games;
+**************************
+
+             name              | cost  | publisher_id | number_of_games_from_this_publisher 
+-------------------------------+-------+--------------+-------------------------------------
+ FIFA 22                       | 39.99 |            1 |                                   1
+ Mass Effect Legendary Edition | 49.99 |            1 |                                   2
+ Assassins Creed Valhalla      | 19.99 |            2 |                                   1
+ Far Cry 6                     | 39.99 |            2 |                                   2
+ Call of Duty: Warzone         |   0.0 |            3 |                                   1
+ Diablo IV                     | 29.99 |            3 |                                   2
+ Fallout 4                     |  9.99 |            4 |                                   1
+ The Elder Scrolls V: Skyrim   | 29.99 |            4 |                                   2
+ Grand Theft Auto V            | 39.99 |            5 |                                   1
+ Red Dead Redemption 2         | 39.99 |            5 |                                   2
+(10 строк)
+
+********* ЗАПРОС *********
+SELECT name, cost, publisher_id, COUNT(game_id) OVER (PARTITION BY publisher_id) AS number_of_games_from_this_publisher 
+FROM Games;
+**************************
+
+             name              | cost  | publisher_id | number_of_games_from_this_publisher 
+-------------------------------+-------+--------------+-------------------------------------
+ FIFA 22                       | 39.99 |            1 |                                   2
+ Mass Effect Legendary Edition | 49.99 |            1 |                                   2
+ Assassins Creed Valhalla      | 19.99 |            2 |                                   2
+ Far Cry 6                     | 39.99 |            2 |                                   2
+ Call of Duty: Warzone         |   0.0 |            3 |                                   2
+ Diablo IV                     | 29.99 |            3 |                                   2
+ Fallout 4                     |  9.99 |            4 |                                   2
+ The Elder Scrolls V: Skyrim   | 29.99 |            4 |                                   2
+ Grand Theft Auto V            | 39.99 |            5 |                                   2
+ Red Dead Redemption 2         | 39.99 |            5 |                                   2
+(10 строк)
+
+********* ЗАПРОС *********
+SELECT g.name, COUNT(r.review_id) AS number_of_reviews FROM Games g
+LEFT JOIN Reviews r ON r.game_id = g.game_id
+GROUP BY g.name HAVING COUNT(r.review_id) > 0 ORDER BY number_of_reviews;
+**************************
+
+            name             | number_of_reviews 
+-----------------------------+-------------------
+ Fallout 4                   |                 1
+ Red Dead Redemption 2       |                 1
+ The Elder Scrolls V: Skyrim |                 1
+ Assassins Creed Valhalla    |                 1
+ Call of Duty: Warzone       |                 1
+ FIFA 22                     |                 2
+(6 строк)
+
+********* ЗАПРОС *********
+SELECT COUNT(user_id)
+    FROM Libraries
+    GROUP BY user_id;
+**************************
+
+ count 
+-------
+     3
+     1
+     1
+     1
+(4 строки)
+
+********* ЗАПРОС *********
+SELECT user_id, COUNT(game_id)
+    FROM Libraries
+    GROUP BY user_id;
+**************************
+
+ user_id | count 
+---------+-------
+      15 |     3
+       3 |     1
+       2 |     1
+       1 |     1
+(4 строки)
+
+********* ЗАПРОС *********
+SELECT nickname
+FROM Users u
+WHERE EXISTS (
+    SELECT user_id, COUNT(game_id)
+    FROM Libraries WHERE u.id = user_id
+    GROUP BY user_id;
+);
+**************************
+
+********* ЗАПРОС *********
+84;
+**************************
+
+********* ЗАПРОС *********
+6u
+SELECT nickname
+FROM Users u
+WHERE EXISTS (
+    SELECT user_id
+    FROM Libraries
+    WHERE u.id = Libraries.user_id
+    GROUP BY user_id
+    HAVING COUNT(game_id) > 5
+);
+**************************
+
+********* ЗАПРОС *********
+SELECT nickname
+FROM Users u
+WHERE EXISTS (
+    SELECT user_id
+    FROM Libraries
+    WHERE u.id = Libraries.user_id
+    GROUP BY user_id
+    HAVING COUNT(game_id) > 5
+);
+**************************
+
+********* ЗАПРОС *********
+SELECT nickname
+FROM Users u
+WHERE EXISTS (
+    SELECT user_id
+    FROM Libraries
+    WHERE u.user_id = Libraries.user_id
+    GROUP BY user_id
+    HAVING COUNT(game_id) > 5
+);
+**************************
+
+ nickname 
+----------
+(0 строк)
+
+********* ЗАПРОС *********
+EXPLAIN SELECT u.nickname, SUM(g.cost) AS total_cost FROM Users u
+LEFT JOIN Orders o ON u.user_id = o.user_id
+LEFT JOIN Orders_Games og ON og.order_id = o.order_id
+LEFT JOIN Games g ON g.game_id = og.game_id
+GROUP BY u.nickname HAVING sum(g.cost) > 0 ORDER BY total_cost;
+**************************
+
+                                           QUERY PLAN                                            
+-------------------------------------------------------------------------------------------------
+ Sort  (cost=108.34..108.43 rows=37 width=150)
+   Sort Key: (sum(g.cost))
+   ->  HashAggregate  (cost=105.72..107.37 rows=37 width=150)
+         Group Key: u.nickname
+         Filter: (sum(g.cost) > '0'::numeric)
+         ->  Hash Left Join  (cost=43.72..94.42 rows=2260 width=150)
+               Hash Cond: (og.game_id = g.game_id)
+               ->  Hash Right Join  (cost=31.92..76.57 rows=2260 width=122)
+                     Hash Cond: (o.user_id = u.user_id)
+                     ->  Hash Right Join  (cost=19.45..58.04 rows=2260 width=8)
+                           Hash Cond: (og.order_id = o.order_id)
+                           ->  Seq Scan on orders_games og  (cost=0.00..32.60 rows=2260 width=8)
+                           ->  Hash  (cost=14.20..14.20 rows=420 width=8)
+                                 ->  Seq Scan on orders o  (cost=0.00..14.20 rows=420 width=8)
+                     ->  Hash  (cost=11.10..11.10 rows=110 width=122)
+                           ->  Seq Scan on users u  (cost=0.00..11.10 rows=110 width=122)
+               ->  Hash  (cost=10.80..10.80 rows=80 width=36)
+                     ->  Seq Scan on games g  (cost=0.00..10.80 rows=80 width=36)
+(18 строк)
+

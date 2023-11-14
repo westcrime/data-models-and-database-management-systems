@@ -221,13 +221,6 @@ INSERT INTO Orders_Games (game_id, order_id) VALUES
 ((SELECT game_id FROM Games WHERE name = 'FIFA 22'), 8),
 ((SELECT game_id FROM Games WHERE name = 'allout 4'), 8);
 
--- Вывод пользователей и общая стоимость их заказов
-SELECT u.nickname, SUM(g.cost) AS total_cost FROM Users u
-LEFT JOIN Orders o ON u.user_id = o.user_id
-LEFT JOIN Orders_Games og ON og.order_id = o.order_id
-LEFT JOIN Games g ON g.game_id = og.game_id
-GROUP BY u.nickname HAVING sum(g.cost) > 0 ORDER BY total_cost;
-
 -- Обновление заказа на сумму выбранных игр
 UPDATE Orders
 SET amount = (
@@ -253,3 +246,50 @@ order_id = 8;
 DELETE FROM Orders WHERE
 order_id = 8;
 SELECT * FROM GAMES WHERE publisher_name = 'EA' OR publisher_name = 'Ubisoft'
+
+SELECT u.nickname, o.order_id
+FROM Users u
+INNER JOIN Orders o
+ON u.user_id = o.user_id;
+
+-- Вывод пользователей и общая стоимость их заказов
+SELECT u.nickname, SUM(g.cost) AS total_cost FROM Users u
+LEFT JOIN Orders o ON u.user_id = o.user_id
+LEFT JOIN Orders_Games og ON og.order_id = o.order_id
+LEFT JOIN Games g ON g.game_id = og.game_id
+GROUP BY u.nickname HAVING sum(g.cost) > 0 ORDER BY total_cost;
+
+-- Получение игр от выбранных издателей
+SELECT name FROM Games
+WHERE publisher_id IN (SELECT publisher_id FROM Publishers WHERE name IN ('EA', 'Ubisoft'));
+
+-- Получение количества приобретенных игр каждого пользователя
+SELECT u.nickname, COUNT(l.game_id) AS count_of_games FROM Users u
+LEFT JOIN Libraries l ON u.user_id = l.user_id
+GROUP BY u.nickname HAVING COUNT(l.game_id) > 0 ORDER BY count_of_games;
+
+-- Получение количества проданных копий каждой игры
+SELECT g.name, COUNT(l.game_id) AS copies_sold FROM Games g
+LEFT JOIN Libraries l ON g.game_id = l.game_id
+GROUP BY g.name ORDER BY copies_sold;
+
+-- Пример использования Partition
+SELECT name, cost, publisher_id, COUNT(game_id) OVER (PARTITION BY publisher_id) AS number_of_games_from_this_publisher 
+FROM Games;
+
+-- Получение количества отзывов для каждой игры
+SELECT g.name, COUNT(r.review_id) AS number_of_reviews FROM Games g
+LEFT JOIN Reviews r ON r.game_id = g.game_id
+GROUP BY g.name HAVING COUNT(r.review_id) > 0 ORDER BY number_of_reviews;
+
+-- Вывод пользователей, у которых больше 5 игр в библиотеке (крутые)
+SELECT nickname
+FROM Users u
+WHERE EXISTS (
+    SELECT user_id
+    FROM Libraries
+    WHERE u.user_id = Libraries.user_id
+    GROUP BY user_id
+    HAVING COUNT(game_id) > 5
+);
+
