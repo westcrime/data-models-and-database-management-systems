@@ -293,3 +293,126 @@ WHERE EXISTS (
     HAVING COUNT(game_id) > 5
 );
 
+-- Union
+SELECT user_id, description
+FROM user_logs
+WHERE date_of_event < '01.01.2000'
+UNION
+SELECT user_id, description
+FROM user_logs_archive;
+
+-- Case
+SELECT
+    nickname,
+    CASE
+        WHEN role_id = 1 THEN 'User'
+        WHEN role_id = 2 THEN 'Admin'
+        ELSE 'Unknown'
+    END AS role_name
+FROM Users;
+
+-- Триггер, добавляющий к общей стоимости заказа стоимость добавленной игры
+CREATE OR REPLACE FUNCTION update_sum_of_order_trigger_function()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE Orders
+    SET amount = amount + (SELECT cost FROM Games WHERE game_id = NEW.game_id)
+    WHERE order_id = NEW.order_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_sum_of_order_trigger
+AFTER INSERT ON Orders_Games
+FOR EACH ROW
+EXECUTE FUNCTION update_sum_of_order_trigger_function();
+
+-- Процедура, с помощью которой можно можно сформировать заказ из игр в корзине в новый заказ
+CREATE OR REPLACE FUNCTION create_order_from_cart(user_id_param INT)
+RETURNS VOID AS $$
+DECLARE
+    new_order_id INT;
+BEGIN
+    -- Создаем новую строку в таблице Orders для пользователя
+    INSERT INTO Orders (user_id, order_date, status, amount)
+    VALUES (user_id_param, CURRENT_DATE, 'Заказ ждет оплаты', 0)
+    RETURNING order_id INTO new_order_id;
+
+    -- Переносим игры из корзины пользователя в таблицу Orders_Games
+    INSERT INTO Orders_Games (game_id, order_id)
+    SELECT game_id, new_order_id
+    FROM Carts
+    WHERE user_id = user_id_param;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Процедура, с помощью которой можно можно получить средний рейтинг игры
+CREATE OR REPLACE FUNCTION get_avg_rating_of_game(game_id_param INT)
+RETURNS DECIMAL AS $$
+DECLARE avg_rating DECIMAL;
+BEGIN
+    SELECT AVG(rating) INTO avg_rating
+    FROM Reviews
+    WHERE game_id = game_id_param;
+
+    RETURN avg_rating;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Процедура выводящая сообщение в текущие логи
+CREATE OR REPLACE FUNCTION post_message_in_log(message_param character varying(250), user_id_param INT)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO user_logs (user_id, date_of_event, message)
+    VALUES (user_id_param, CURRENT_DATE, message_param);
+END;
+$$ LANGUAGE plpgsql;
+
+-- Логгирование юзера
+CREATE OR REPLACE FUNCTION log_inserted_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Новый пользователь с ID = ' || NEW.user_id || ' и именем = ' || NEW.nickname || ' был добавлен в таблицу.';
+
+    PERFORM post_message_in_log(NEW.user_id, message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER insert_new_user_trigger
+AFTER INSERT ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_inserted_user();
+
+CREATE OR REPLACE FUNCTION log_updated_user_data()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Данные пользователя с ID = ' || OLD.user_id || ' были обновлены.';
+
+    IF OLD.nickname <> NEW.nickname THEN
+        message := message || ' Изменено имя пользователя: ' || OLD.nickname || ' -> ' || NEW.nickname || '.';
+    END IF;
+
+    IF OLD.email <> NEW.email THEN
+        message := message || ' Изменен адрес электронной почты: ' || OLD.email || ' -> ' || NEW.email || '.';
+    END IF;
+
+    IF OLD.balance <> NEW.balance THEN
+        message := message || ' Пополнен баланс пользователя: ' || OLD.balance || ' -> ' || NEW.balance || '.';
+    END IF;
+
+    PERFORM post_message_in_log(NEW.user_id, message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER update_user_trigger
+AFTER UPDATE ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_updated_user_data();

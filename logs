@@ -1915,3 +1915,1304 @@ GROUP BY u.nickname HAVING sum(g.cost) > 0 ORDER BY total_cost;
                      ->  Seq Scan on games g  (cost=0.00..10.80 rows=80 width=36)
 (18 строк)
 
+             Список отношений
+ Схема  |    Имя    |   Тип   | Владелец  
+--------+-----------+---------+-----------
+ public | user_logs | таблица | westcrime
+(1 строка)
+
+********* ЗАПРОС *********
+select * from user_logs
+;
+**************************
+
+ user_log_id | user_id | date_of_event | description 
+-------------+---------+---------------+-------------
+(0 строк)
+
+********* ЗАПРОС *********
+select * from users
+;
+**************************
+
+ user_id |  nickname   |                           password                           |            email            | role_id | profile_pic_path | balance 
+---------+-------------+--------------------------------------------------------------+-----------------------------+---------+------------------+---------
+       1 | lcolbourn0  | $2a$04$EW4zWKiZAPRdqvz/dqb6K.3qA26GLjsT8ZBAQDpb6JFjDEqGxbVuW | tfance0@jalbum.net          |       1 |                  |   39.59
+       2 | tmccroft1   | $2a$04$PUPWHe6OdiBe63iyJY1M9esrxfexyMDqwgEfqOIwQn9MVE4UwTcri | ebattey1@booking.com        |       1 |                  |    6.01
+       3 | haggott2    | $2a$04$0O9fgMOopSKo5nIgbK4FYukOtGhS55MrBnQNQV4wpC6VDShwozJkC | drubens2@i2i.jp             |       1 |                  |    4.82
+       4 | rgrolmann3  | $2a$04$jjgLBhQBaa7ZScTJtsZKx.96LCPHgxoYblm3iETgE.KzoMMzV5bIi | eclemmen3@liveinternet.ru   |       1 |                  |   38.09
+       5 | vmacklam4   | $2a$04$V/Q98ejholWc59WWu22WG.RHvp9KnCZIWwssqNbvHAvCOPK884pLq | deberst4@nifty.com          |       1 |                  |   87.45
+       6 | zvannozzii5 | $2a$04$M4985O7tBQwhM9gq3sQMtOb0VPecCd5O6PR4UiVfpgIr86nr6Xx4W | dellin5@dailymotion.com     |       1 |                  |   10.13
+       7 | rcreasy6    | $2a$04$uBNelcgZUbgeYtLVj4UdoedTIiYIZlk2MDQ43vphxnnBNmvfk8IKi | mfigliovanni6@myspace.com   |       1 |                  |   67.49
+       8 | ltchir7     | $2a$04$bFkCYx1ZNXor8oYhVf3rf.HzNLbPszFPLi9JYOvlVBaCOv2FnJleG | mziems7@statcounter.com     |       1 |                  |    4.27
+       9 | jnovello8   | $2a$04$lyh9YbopC.RgEipupXkwkeY6TDjNQLf0DuitjGkgk2dv9vphwO1wW | bwillder8@cisco.com         |       1 |                  |   42.43
+      10 | wbahde9     | $2a$04$NAp7qPF/O8EQNdTfwsU8UONZFMek3VYn/bQ1S5shDsTZIcsizzMTe | lchalk9@sitemeter.com       |       1 |                  |   48.88
+      11 | ffussella   | $2a$04$wSnENb5it6GVlhNRL7So0.3CUQM7WUnCjRxaByFkuQ.yzZRCFXNSm | gcallena@princeton.edu      |       1 |                  |   84.91
+      12 | clawmanb    | $2a$04$iLWdN72.v/Y7CUyuKUGgv.iosFV6unKvko9cVvGYPLQJJ9Tn6zjsa | mmenatb@craigslist.org      |       1 |                  |   16.03
+      13 | rcaugheyc   | $2a$04$xpSvGGLxe3PoitYQGf7RS.6Iqi4QiqOcrotBO.4hpC8gKTeXgYC6q | rmuckeenc@prnewswire.com    |       1 |                  |   29.03
+      14 | morwelld    | $2a$04$vikADNuesvfv8J2RyrdO.emsr4S4PKAOWr8d2hJOvw65RgrfnJHG6 | foloned@amazon.de           |       1 |                  |   80.17
+      15 | thawke      | $2a$04$Io0JG1rYGrWLYK8lWnjXnemJzcHGvG28EJ.7buA0aDsABC0wxuk/m | ecrowchee@technorati.com    |       1 |                  |   26.11
+      16 | rmolloyf    | $2a$04$Y1Uwk09GFKLzIEqOUgALsuLVBcvOxqROr/SLRpfAKw8OENYEelMai | ydaelmanf@elegantthemes.com |       1 |                  |    64.7
+      17 | bmelliardg  | $2a$04$WRNJmH.8ILrgbpweYKvlcuaX4NOXRh5rCm3oclfiN.6wvKib8RUG. | mpefferg@marriott.com       |       1 |                  |   17.51
+      18 | cskehanh    | $2a$04$b54zy6G1RCp/KZPpGFOXsuFaViQrgPAdntb0zvjK.ICMEeOKhC/3O | jgasnellh@cbslocal.com      |       1 |                  |   23.76
+      19 | dhurnelli   | $2a$04$CWh9fdT.1yJvW4MLqReqJ.v8PS/u4isRXW1hDPXGO8bC5TvDQJg76 | acokei@washington.edu       |       1 |                  |    2.45
+      20 | bhendersonj | $2a$04$GGxf.6ugg6ter/YSHTLU8e16ZG5c9sQdY569ouR47Jk5AjAUzNGNW | abriddenj@taobao.com        |       1 |                  |   58.56
+(20 строк)
+
+********* ЗАПРОС *********
+select * from carts
+;
+**************************
+
+ game_id | user_id 
+---------+---------
+       1 |       5
+       1 |       6
+       1 |       9
+       3 |      16
+      10 |      16
+       9 |      16
+(6 строк)
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION update_sum_of_order_trigger_function()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE Orders
+    SET amount = amount + NEW.cost
+    WHERE order_id = NEW.order_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER update_sum_of_order_trigger
+AFTER INSERT ON Orders_Games
+FOR EACH ROW
+EXECUTE FUNCTION update_sum_of_order_trigger_function();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION create_order_from_cart(user_id_param INT)
+RETURNS VOID AS $$
+DECLARE
+    new_order_id INT;
+BEGIN
+    -- Создаем новую строку в таблице Orders для пользователя
+    INSERT INTO Orders (user_id, order_date, status, amount)
+    VALUES (user_id_param, CURRENT_DATE, 'Заказ ждет оплаты', 0)
+    RETURNING order_id INTO new_order_id;
+
+    -- Переносим игры из корзины пользователя в таблицу Orders_Games
+    INSERT INTO Orders_Games (game_id, order_id)
+    SELECT game_id, new_order_id
+    FROM Carts
+    WHERE user_id = user_id_param;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+select * from orders
+;
+**************************
+
+ order_id | user_id | order_date |        status        | amount 
+----------+---------+------------+----------------------+--------
+        6 |       2 | 2023-10-30 | Заказ не сформирован |    0.0
+        5 |       1 | 2023-10-30 | Заказ не сформирован |       
+        7 |      11 | 2023-10-30 | Заказ ждет оплаты    |  39.99
+        8 |      11 | 2023-10-31 | Заказ не сформирован |  79.98
+(4 строки)
+
+********* ЗАПРОС *********
+CALL create_order_from_cart(16);
+**************************
+
+********* ЗАПРОС *********
+SELECT create_order_from_cart(16);
+**************************
+
+********* ЗАПРОС *********
+select * from games
+;
+**************************
+
+ game_id |             name              |                                       description                                       | publisher_id | category_id | cost  | picture_path 
+---------+-------------------------------+-----------------------------------------------------------------------------------------+--------------+-------------+-------+--------------
+       1 | FIFA 22                       | Футбольный симулятор с реалистичной графикой и улучшенным геймплеем.                    |            1 |           6 | 39.99 | 
+       2 | Assassins Creed Valhalla      | RPG-приключение, в котором вы играете за викинга и исследуете древнюю Англию.           |            2 |           4 | 19.99 | 
+       3 | Call of Duty: Warzone         | Бесплатный боевой рояль в мире Call of Duty с интенсивными онлайн-сражениями.           |            3 |           1 |   0.0 | 
+       4 | The Elder Scrolls V: Skyrim   | Эпическая RPG с открытым миром, где вы исследуете фэнтезийное королевство.              |            4 |           2 | 29.99 | 
+       5 | Grand Theft Auto V            | Открытый мир, где вы совершаете ограбления и исследуете фиктивный город Лос-Сантос.     |            5 |           4 | 39.99 | 
+       6 | Mass Effect Legendary Edition | Сборник ролевых игр с улучшенной графикой и вселенной научной фантастики.               |            1 |           2 | 49.99 | 
+       7 | Far Cry 6                     | Шутер с открытым миром, вас ожидает борьба с тиранией на тропическом острове.           |            2 |           1 | 39.99 | 
+       8 | Diablo IV                     | RPG с мрачным фэнтезийным миром и борьбой с демонами.                                   |            3 |           2 | 29.99 | 
+       9 | Fallout 4                     | Постапокалиптическая RPG с элементами выживания и исследования.                         |            4 |           2 |  9.99 | 
+      10 | Red Dead Redemption 2         | Вестерн с ошеломляющей графикой, где вы отправляетесь в путешествие в конце 19-го века. |            5 |           6 | 39.99 | 
+(10 строк)
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION update_sum_of_order_trigger_function()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE Orders
+    SET amount = amount + (SELECT cost FROM Games WHERE game_id = NEW.game_id)
+    WHERE order_id = NEW.order_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+SELECT create_order_from_cart(16);
+**************************
+
+ create_order_from_cart 
+------------------------
+ 
+(1 строка)
+
+********* ЗАПРОС *********
+select & from orders
+;
+**************************
+
+********* ЗАПРОС *********
+select * from orders
+;
+**************************
+
+ order_id | user_id | order_date |        status        | amount 
+----------+---------+------------+----------------------+--------
+        6 |       2 | 2023-10-30 | Заказ не сформирован |    0.0
+        5 |       1 | 2023-10-30 | Заказ не сформирован |       
+        7 |      11 | 2023-10-30 | Заказ ждет оплаты    |  39.99
+        8 |      11 | 2023-10-31 | Заказ не сформирован |  79.98
+       10 |      16 | 2023-11-21 | Заказ ждет оплаты    |  49.98
+(5 строк)
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION get_avg_rating_of_game(game_id_param INT)
+RETURNS DECIMAL AS $$
+BEGIN
+    SELECT AVG(rating) INTO avg_rating
+    FROM Reviews
+    WHERE game_id = game_id_param;
+
+    RETURN avg_rating;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION get_avg_rating_of_game(game_id_param INT)
+RETURNS DECIMAL AS $$
+DECLARE avg_rating DECIMAL;
+BEGIN
+    SELECT AVG(rating) INTO avg_rating
+    FROM Reviews
+    WHERE game_id = game_id_param;
+
+    RETURN avg_rating;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+select * from reviews
+;
+**************************
+
+ review_id | user_id | game_id | rating |       description        
+-----------+---------+---------+--------+--------------------------
+         1 |       1 |       1 |      4 | Very cool game!
+         2 |       1 |      10 |      5 | Masterpiece!
+         3 |       2 |       3 |      3 | Good.
+         4 |       5 |       4 |      4 | Nice open world!
+         5 |       7 |       1 |      2 | Very bad product.
+         6 |       7 |       9 |      5 | Masterpiece!
+         7 |      15 |       2 |      5 | Waste of money and time!
+(7 строк)
+
+********* ЗАПРОС *********
+select get_avg_rating_of_game(1);
+**************************
+
+ get_avg_rating_of_game 
+------------------------
+     3.0000000000000000
+(1 строка)
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION post_message_in_log(message_param VARCHAR(250))
+RETURN VOID AS $$
+BEGIN
+    RAISE NOTICE '%', message_param;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_inserted_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Новый пользователь с ID = ' || NEW.user_id || ' и именем = ' || NEW.nickname || ' был добавлен в таблицу.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER insert_new_user_trigger
+AFTER INSERT ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_inserted_user();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_updated_user_data()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Данные пользователя с ID = ' || OLD.user_id || ' были обновлены.';
+
+    IF OLD.nickname <> NEW.nickname THEN
+        message := message || ' Изменено имя пользователя: ' || OLD.nickname || ' -> ' || NEW.nickname || '.';
+    END IF;
+
+    IF OLD.email <> NEW.email THEN
+        message := message || ' Изменен адрес электронной почты: ' || OLD.email || ' -> ' || NEW.email || '.';
+    END IF;
+
+    IF OLD.balance <> NEW.balance THEN
+        message := message || ' Пополнен баланс пользователя: ' || OLD.balance || ' -> ' || NEW.balance || '.';
+    END IF;
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER update_user_trigger
+AFTER UPDATE ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_updated_user_data();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_deleted_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Пользователь с ID = ' || OLD.user_id || ' и именем = ' || OLD.nickname || ' был удален.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER delete_user_trigger
+AFTER DELETE ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_deleted_user();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+update users set nickname = 'dima' where user_id = 1
+;
+**************************
+
+********* ЗАПРОС *********
+D
+-- Процедура выводящая сообщение в текущие логи
+CREATE OR REPLACE FUNCTION post_message_in_log(message_param VARCHAR(250))
+RETURN VOID AS $$
+BEGIN
+    RAISE NOTICE '%', message_param;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_inserted_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Новый пользователь с ID = ' || NEW.user_id || ' и именем = ' || NEW.nickname || ' был добавлен в таблицу.';
+
+    PERFORM post_message_in_log(CAST(message AS VARCHAR)); -- Явное приведение типа
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER insert_new_user_trigger
+AFTER INSERT ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_inserted_user();
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_updated_user_data()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Данные пользователя с ID = ' || OLD.user_id || ' были обновлены.';
+
+    IF OLD.nickname <> NEW.nickname THEN
+        message := message || ' Изменено имя пользователя: ' || OLD.nickname || ' -> ' || NEW.nickname || '.';
+    END IF;
+
+    IF OLD.email <> NEW.email THEN
+        message := message || ' Изменен адрес электронной почты: ' || OLD.email || ' -> ' || NEW.email || '.';
+    END IF;
+
+    IF OLD.balance <> NEW.balance THEN
+        message := message || ' Пополнен баланс пользователя: ' || OLD.balance || ' -> ' || NEW.balance || '.';
+    END IF;
+
+    PERFORM post_message_in_log(CAST(message AS VARCHAR)); -- Явное приведение типа
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER update_user_trigger
+AFTER UPDATE ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_updated_user_data();
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_deleted_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Пользователь с ID = ' || OLD.user_id || ' и именем = ' || OLD.nickname || ' был удален.';
+
+    PERFORM post_message_in_log(CAST(message AS VARCHAR)); -- Явное приведение типа
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER delete_user_trigger
+AFTER DELETE ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_deleted_user();
+**************************
+
+********* ЗАПРОС *********
+adsa
+
+-- Процедура выводящая сообщение в текущие логи
+CREATE OR REPLACE FUNCTION post_message_in_log(message_param VARCHAR(250))
+RETURN VOID AS $$
+BEGIN
+    RAISE NOTICE '%', message_param;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_inserted_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Новый пользователь с ID = ' || NEW.user_id || ' и именем = ' || NEW.nickname || ' был добавлен в таблицу.';
+
+    PERFORM post_message_in_log(CAST(message AS VARCHAR)); -- Явное приведение типа
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER insert_new_user_trigger
+AFTER INSERT ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_inserted_user();
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_updated_user_data()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Данные пользователя с ID = ' || OLD.user_id || ' были обновлены.';
+
+    IF OLD.nickname <> NEW.nickname THEN
+        message := message || ' Изменено имя пользователя: ' || OLD.nickname || ' -> ' || NEW.nickname || '.';
+    END IF;
+
+    IF OLD.email <> NEW.email THEN
+        message := message || ' Изменен адрес электронной почты: ' || OLD.email || ' -> ' || NEW.email || '.';
+    END IF;
+
+    IF OLD.balance <> NEW.balance THEN
+        message := message || ' Пополнен баланс пользователя: ' || OLD.balance || ' -> ' || NEW.balance || '.';
+    END IF;
+
+    PERFORM post_message_in_log(CAST(message AS VARCHAR)); -- Явное приведение типа
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER update_user_trigger
+AFTER UPDATE ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_updated_user_data();
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_deleted_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Пользователь с ID = ' || OLD.user_id || ' и именем = ' || OLD.nickname || ' был удален.';
+
+    PERFORM post_message_in_log(CAST(message AS VARCHAR)); -- Явное приведение типа
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER delete_user_trigger
+AFTER DELETE ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_deleted_user();
+**************************
+
+********* ЗАПРОС *********
+update users set nickname = 'Dima' where user_id=1;
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION post_message_in_log(message_param character varying(250))
+RETURN VOID AS $$
+BEGIN
+    RAISE NOTICE '%', message_param;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_inserted_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Новый пользователь с ID = ' || NEW.user_id || ' и именем = ' || NEW.nickname || ' был добавлен в таблицу.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER insert_new_user_trigger
+AFTER INSERT ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_inserted_user();
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_updated_user_data()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Данные пользователя с ID = ' || OLD.user_id || ' были обновлены.';
+
+    IF OLD.nickname <> NEW.nickname THEN
+        message := message || ' Изменено имя пользователя: ' || OLD.nickname || ' -> ' || NEW.nickname || '.';
+    END IF;
+
+    IF OLD.email <> NEW.email THEN
+        message := message || ' Изменен адрес электронной почты: ' || OLD.email || ' -> ' || NEW.email || '.';
+    END IF;
+
+    IF OLD.balance <> NEW.balance THEN
+        message := message || ' Пополнен баланс пользователя: ' || OLD.balance || ' -> ' || NEW.balance || '.';
+    END IF;
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER update_user_trigger
+AFTER UPDATE ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_updated_user_data();
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_deleted_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Пользователь с ID = ' || OLD.user_id || ' и именем = ' || OLD.nickname || ' был удален.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER delete_user_trigger
+AFTER DELETE ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_deleted_user();
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION post_message_in_log(message_param character varying(250))
+RETURN VOID AS $$
+BEGIN
+    RAISE NOTICE '%', message_param;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_inserted_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Новый пользователь с ID = ' || NEW.user_id || ' и именем = ' || NEW.nickname || ' был добавлен в таблицу.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE TRIGGER insert_new_user_trigger
+AFTER INSERT ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_inserted_user();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_updated_user_data()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Данные пользователя с ID = ' || OLD.user_id || ' были обновлены.';
+
+    IF OLD.nickname <> NEW.nickname THEN
+        message := message || ' Изменено имя пользователя: ' || OLD.nickname || ' -> ' || NEW.nickname || '.';
+    END IF;
+
+    IF OLD.email <> NEW.email THEN
+        message := message || ' Изменен адрес электронной почты: ' || OLD.email || ' -> ' || NEW.email || '.';
+    END IF;
+
+    IF OLD.balance <> NEW.balance THEN
+        message := message || ' Пополнен баланс пользователя: ' || OLD.balance || ' -> ' || NEW.balance || '.';
+    END IF;
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE TRIGGER update_user_trigger
+AFTER UPDATE ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_updated_user_data();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_deleted_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Пользователь с ID = ' || OLD.user_id || ' и именем = ' || OLD.nickname || ' был удален.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE TRIGGER delete_user_trigger
+AFTER DELETE ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_deleted_user();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION post_message_in_log(message_param character varying(250))
+RETURNS VOID AS $$
+BEGIN
+    RAISE NOTICE '%', message_param;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_inserted_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Новый пользователь с ID = ' || NEW.user_id || ' и именем = ' || NEW.nickname || ' был добавлен в таблицу.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE TRIGGER insert_new_user_trigger
+AFTER INSERT ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_inserted_user();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_updated_user_data()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Данные пользователя с ID = ' || OLD.user_id || ' были обновлены.';
+
+    IF OLD.nickname <> NEW.nickname THEN
+        message := message || ' Изменено имя пользователя: ' || OLD.nickname || ' -> ' || NEW.nickname || '.';
+    END IF;
+
+    IF OLD.email <> NEW.email THEN
+        message := message || ' Изменен адрес электронной почты: ' || OLD.email || ' -> ' || NEW.email || '.';
+    END IF;
+
+    IF OLD.balance <> NEW.balance THEN
+        message := message || ' Пополнен баланс пользователя: ' || OLD.balance || ' -> ' || NEW.balance || '.';
+    END IF;
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE TRIGGER update_user_trigger
+AFTER UPDATE ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_updated_user_data();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_deleted_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Пользователь с ID = ' || OLD.user_id || ' и именем = ' || OLD.nickname || ' был удален.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE TRIGGER delete_user_trigger
+AFTER DELETE ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_deleted_user();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+update users ser nickname = 'Dima' where user_id = 1
+;
+**************************
+
+********* ЗАПРОС *********
+update users set nickname = 'Dima' where user_id = 1
+;
+**************************
+
+UPDATE 1
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_inserted_game()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Новая игра с ID = ' || NEW.game_id || ' и названием = ' || NEW.name || ' была добавлена в таблицу.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER insert_new_game_trigger
+AFTER INSERT ON Games
+FOR EACH ROW
+EXECUTE FUNCTION log_inserted_game();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_updated_game_data()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Данные об игре с ID = ' || OLD.game_id || ' были обновлены.';
+
+    IF OLD.name <> NEW.name THEN
+        message := message || ' Изменено название игры: ' || OLD.name || ' -> ' || NEW.name || '.';
+    END IF;
+
+    IF OLD.category_id <> NEW.category_id THEN
+        message := message || ' Изменен жанр игры: ' || OLD.category_id || ' -> ' || NEW.category_id || '.';
+    END IF;
+
+    IF OLD.cost <> NEW.cost THEN
+        message := message || ' Изменена стоимость игры: ' || OLD.cost || ' -> ' || NEW.cost || '.';
+    END IF;
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER update_game_trigger
+AFTER UPDATE ON Games
+FOR EACH ROW
+EXECUTE FUNCTION log_updated_game_data();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_deleted_game()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Игра с ID = ' || OLD.game_id || ' и названием = ' || OLD.name || ' была удалена.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER delete_game_trigger
+AFTER DELETE ON Games
+FOR EACH ROW
+EXECUTE FUNCTION log_deleted_game();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+clraCREATE OR REPLACE FUNCTION log_inserted_game()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Новая игра с ID = ' || NEW.game_id || ' и названием = ' || NEW.name || ' была добавлена в таблицу.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+********* ЗАПРОС *********
+CREATE TRIGGER insert_new_game_trigger
+AFTER INSERT ON Games
+FOR EACH ROW
+EXECUTE FUNCTION log_inserted_game();
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_updated_game_data()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Данные об игре с ID = ' || OLD.game_id || ' были обновлены.';
+
+    IF OLD.name <> NEW.name THEN
+        message := message || ' Изменено название игры: ' || OLD.name || ' -> ' || NEW.name || '.';
+    END IF;
+
+    IF OLD.category_id <> NEW.category_id THEN
+        message := message || ' Изменен жанр игры: ' || OLD.category_id || ' -> ' || NEW.category_id || '.';
+    END IF;
+
+    IF OLD.cost <> NEW.cost THEN
+        message := message || ' Изменена стоимость игры: ' || OLD.cost || ' -> ' || NEW.cost || '.';
+    END IF;
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER update_game_trigger
+AFTER UPDATE ON Games
+FOR EACH ROW
+EXECUTE FUNCTION log_updated_game_data();
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_deleted_game()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Игра с ID = ' || OLD.game_id || ' и названием = ' || OLD.name || ' была удалена.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER delete_game_trigger
+AFTER DELETE ON Games
+FOR EACH ROW
+EXECUTE FUNCTION log_deleted_game();
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_inserted_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Новый пользователь с ID = ' || NEW.user_id || ' и именем = ' || NEW.nickname || ' был добавлен в таблицу.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE TRIGGER insert_new_user_trigger
+AFTER INSERT ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_inserted_user();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_updated_user_data()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Данные пользователя с ID = ' || OLD.user_id || ' были обновлены.';
+
+    IF OLD.nickname <> NEW.nickname THEN
+        message := message || ' Изменено имя пользователя: ' || OLD.nickname || ' -> ' || NEW.nickname || '.';
+    END IF;
+
+    IF OLD.email <> NEW.email THEN
+        message := message || ' Изменен адрес электронной почты: ' || OLD.email || ' -> ' || NEW.email || '.';
+    END IF;
+
+    IF OLD.balance <> NEW.balance THEN
+        message := message || ' Пополнен баланс пользователя: ' || OLD.balance || ' -> ' || NEW.balance || '.';
+    END IF;
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE TRIGGER update_user_trigger
+AFTER UPDATE ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_updated_user_data();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_deleted_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Пользователь с ID = ' || OLD.user_id || ' и именем = ' || OLD.nickname || ' был удален.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE TRIGGER delete_user_trigger
+AFTER DELETE ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_deleted_user();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_inserted_game()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Новая игра с ID = ' || NEW.game_id || ' и названием = ' || NEW.name || ' была добавлена в таблицу.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER insert_new_game_trigger
+AFTER INSERT ON Games
+FOR EACH ROW
+EXECUTE FUNCTION log_inserted_game();
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_inserted_game()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Новая игра с ID = ' || NEW.game_id || ' и названием = ' || NEW.name || ' была добавлена в таблицу.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE TRIGGER insert_new_game_trigger
+AFTER INSERT ON Games
+FOR EACH ROW
+EXECUTE FUNCTION log_inserted_game();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_updated_game_data()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Данные об игре с ID = ' || OLD.game_id || ' были обновлены.';
+
+    IF OLD.name <> NEW.name THEN
+        message := message || ' Изменено название игры: ' || OLD.name || ' -> ' || NEW.name || '.';
+    END IF;
+
+    IF OLD.category_id <> NEW.category_id THEN
+        message := message || ' Изменен жанр игры: ' || OLD.category_id || ' -> ' || NEW.category_id || '.';
+    END IF;
+
+    IF OLD.cost <> NEW.cost THEN
+        message := message || ' Изменена стоимость игры: ' || OLD.cost || ' -> ' || NEW.cost || '.';
+    END IF;
+
+    PERFORM post_message_in_log(message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE TRIGGER update_game_trigger
+AFTER UPDATE ON Games
+FOR EACH ROW
+EXECUTE FUNCTION log_updated_game_data();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_deleted_game()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Игра с ID = ' || OLD.game_id || ' и названием = ' || OLD.name || ' была удалена.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE TRIGGER delete_game_trigger
+AFTER DELETE ON Games
+FOR EACH ROW
+EXECUTE FUNCTION log_deleted_game();
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE TRIGGER update_game_trigger
+AFTER UPDATE ON Games
+FOR EACH ROW
+EXECUTE FUNCTION log_updated_game_data();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_deleted_game()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Игра с ID = ' || OLD.game_id || ' и названием = ' || OLD.name || ' была удалена.';
+
+    PERFORM post_message_in_log(message);
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE TRIGGER delete_game_trigger
+AFTER DELETE ON Games
+FOR EACH ROW
+EXECUTE FUNCTION log_deleted_game();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+drop FUNCTION log_inserted_game();
+**************************
+
+********* ЗАПРОС *********
+drop TRIGGER insert_new_game_trigger on games;
+**************************
+
+DROP TRIGGER
+********* ЗАПРОС *********
+drop TRIGGER update_game_trigger on games;
+**************************
+
+DROP TRIGGER
+********* ЗАПРОС *********
+drop TRIGGER delete_game_trigger on games;
+**************************
+
+DROP TRIGGER
+********* ЗАПРОС *********
+drop FUNCTION log_inserted_game();
+**************************
+
+DROP FUNCTION
+********* ЗАПРОС *********
+drop TRIGGER delete_user_trigger on users;
+**************************
+
+DROP TRIGGER
+********* ЗАПРОС *********
+drop FUNCTION log_deleted_user();
+**************************
+
+DROP FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION post_message_in_log(message_param character varying(250), user_id_param INT)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO user_logs (user_id, date_of_event, message)
+    VALUES (user_id_param, CURRENT_DATE, message_param);
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_inserted_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Новый пользователь с ID = ' || NEW.user_id || ' и именем = ' || NEW.nickname || ' был добавлен в таблицу.';
+
+    PERFORM post_message_in_log(NEW.user_id, message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE TRIGGER insert_new_user_trigger
+AFTER INSERT ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_inserted_user();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_updated_user_data()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Данные пользователя с ID = ' || OLD.user_id || ' были обновлены.';
+
+    IF OLD.nickname <> NEW.nickname THEN
+        message := message || ' Изменено имя пользователя: ' || OLD.nickname || ' -> ' || NEW.nickname || '.';
+    END IF;
+
+    IF OLD.email <> NEW.email THEN
+        message := message || ' Изменен адрес электронной почты: ' || OLD.email || ' -> ' || NEW.email || '.';
+    END IF;
+
+    IF OLD.balance <> NEW.balance THEN
+        message := message || ' Пополнен баланс пользователя: ' || OLD.balance || ' -> ' || NEW.balance || '.';
+    END IF;
+
+    PERFORM post_message_in_log(NEW.user_id, message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE TRIGGER update_user_trigger
+AFTER UPDATE ON Users
+FOR EACH ROW
+EXECUTE FUNCTION log_updated_user_data();
+**************************
+
+CREATE TRIGGER
