@@ -416,3 +416,23 @@ CREATE OR REPLACE TRIGGER update_user_trigger
 AFTER UPDATE ON Users
 FOR EACH ROW
 EXECUTE FUNCTION log_updated_user_data();
+
+-- Пополнение баланса
+CREATE OR REPLACE FUNCTION add_money_to_user_balance()
+RETURNS TRIGGER AS $$
+DECLARE
+    amount DECIMAL;
+BEGIN
+    amount := NEW.amount;
+
+    UPDATE Users SET balance = balance + NEW.amount
+    WHERE user_id = NEW.user_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER update_balance_of_user
+AFTER UPDATE ON Payments
+FOR EACH ROW
+EXECUTE FUNCTION add_money_to_user_balance();
