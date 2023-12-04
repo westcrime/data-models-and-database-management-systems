@@ -282,6 +282,11 @@ SELECT g.name, COUNT(r.review_id) AS number_of_reviews FROM Games g
 LEFT JOIN Reviews r ON r.game_id = g.game_id
 GROUP BY g.name HAVING COUNT(r.review_id) > 0 ORDER BY number_of_reviews;
 
+-- Получение всей информации по игре
+SELECT g.game_id, g.name, g.description, p.name, c.name, g.cost, g.picture_path FROM Games g
+LEFT JOIN Publishers p ON p.publisher_id = g.publisher_id
+LEFT JOIN Categories c ON c.category_id = g.category_id;
+
 -- Вывод пользователей, у которых больше 5 игр в библиотеке (крутые)
 SELECT nickname
 FROM Users u
@@ -360,10 +365,10 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Процедура выводящая сообщение в текущие логи
-CREATE OR REPLACE FUNCTION post_message_in_log(message_param character varying(250), user_id_param INT)
+CREATE OR REPLACE FUNCTION post_message_in_log(user_id_param INT, message_param VARCHAR(250))
 RETURNS VOID AS $$
 BEGIN
-    INSERT INTO user_logs (user_id, date_of_event, message)
+    INSERT INTO user_logs (user_id, date_of_event, description)
     VALUES (user_id_param, CURRENT_DATE, message_param);
 END;
 $$ LANGUAGE plpgsql;
@@ -403,7 +408,7 @@ BEGIN
     END IF;
 
     IF OLD.balance <> NEW.balance THEN
-        message := message || ' Пополнен баланс пользователя: ' || OLD.balance || ' -> ' || NEW.balance || '.';
+        message := message || ' Изменен баланс пользователя: ' || OLD.balance || ' -> ' || NEW.balance || '.';
     END IF;
 
     PERFORM post_message_in_log(NEW.user_id, message);
@@ -436,3 +441,60 @@ CREATE OR REPLACE TRIGGER update_balance_of_user
 AFTER UPDATE ON Payments
 FOR EACH ROW
 EXECUTE FUNCTION add_money_to_user_balance();
+
+-- Процедура, с помощью которой можно оплатить заказ и получить игры из заказа
+CREATE OR REPLACE FUNCTION pay_for_order(user_id_param INT, order_id_param INT)
+RETURNS BOOLEAN AS $$
+DECLARE
+    total_amount DECIMAL;
+BEGIN
+    -- Получаем общую сумму заказа
+    SELECT amount INTO total_amount
+    FROM Orders
+    WHERE order_id = order_id_param;
+
+    -- Проверяем, достаточно ли средств у пользователя
+    IF (SELECT balance FROM Users WHERE user_id = user_id_param) >= total_amount THEN
+        -- Если достаточно средств, выполняем операции
+        INSERT INTO Libraries (game_id, user_id)
+        SELECT game_id, user_id_param AS user_id
+        FROM Orders_Games
+        WHERE order_id = order_id_param;
+
+        UPDATE Orders SET status = 'Заказ был оплачен пользователем'
+        WHERE order_id = order_id_param;
+
+        UPDATE Users SET balance = balance - total_amount
+        WHERE user_id = user_id_param;
+
+        RETURN true;
+    ELSE
+        -- Если недостаточно средств, возвращаем false
+        RETURN false;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- Процедура, с помощью которой можно добавить игру в Carts
+CREATE OR REPLACE FUNCTION add_game_to_carts(game_id_param INT, user_id_param INT)
+RETURNS BOOLEAN AS $$
+DECLARE
+    game_exists BOOLEAN;
+BEGIN
+    SELECT EXISTS (
+        SELECT 1
+        FROM Libraries
+        WHERE game_id = game_id_param AND user_id = user_id_param
+        LIMIT 1
+    ) INTO game_exists;
+
+    IF game_exists THEN
+        RETURN false;
+    ELSE
+        INSERT INTO Carts (game_id, user_id)
+        VALUES (game_id_param, user_id_param);
+        RETURN true;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;

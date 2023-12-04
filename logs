@@ -3241,3 +3241,862 @@ EXECUTE FUNCTION add_money_to_user_balance();
 **************************
 
 CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION add_money_to_user_balance()
+RETURNS TRIGGER AS $$
+DECLARE
+    amount DECIMAL;
+BEGIN
+    amount := NEW.amount;
+
+    UPDATE Users SET balance = balance + NEW.amount
+    WHERE user_id = NEW.user_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE TRIGGER update_balance_of_user
+AFTER UPDATE ON Payments
+FOR EACH ROW
+EXECUTE FUNCTION add_money_to_user_balance();
+**************************
+
+CREATE TRIGGER
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION pay_for_order(user_id_param INT, order_id_param INT)
+RETURNS VOID AS $$
+BEGIN
+    -- Создаем новую строку в таблице Orders для пользователя
+    INSERT INTO Orders (user_id, order_date, status, amount)
+    VALUES (user_id_param, CURRENT_DATE, 'Заказ ждет оплаты', 0)
+    RETURNING order_id INTO new_order_id;
+
+    -- Переносим игры из заказа пользователя в таблицу Libraries
+    INSERT INTO Libraries (game_id, user_id)
+    SELECT game_id, user_id AS user_id_param
+    FROM Orders_Games
+    WHERE order_id = order_id_param;
+
+    UPDATE Orders SET status = 'Заказ был оплачен пользователем и игры уже хранятся в его библиотеке'
+    WHERE order_id = order_id_param;
+     
+    UPDATE Users SET balance = balance - (SELECT amount FROM Orders WHERE order_id = order_id_param)
+    WHERE user_id = user_id_param;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION pay_for_order(user_id_param INT, order_id_param INT)
+RETURNS VOID AS $$
+BEGIN
+    -- Переносим игры из заказа пользователя в таблицу Libraries
+    INSERT INTO Libraries (game_id, user_id)
+    SELECT game_id, user_id AS user_id_param
+    FROM Orders_Games
+    WHERE order_id = order_id_param;
+
+    UPDATE Orders SET status = 'Заказ был оплачен пользователем и игры уже хранятся в его библиотеке'
+    WHERE order_id = order_id_param;
+     
+    UPDATE Users SET balance = balance - (SELECT amount FROM Orders WHERE order_id = order_id_param)
+    WHERE user_id = user_id_param;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION add_game_to_carts(game_id_param INT, user_id_param INT)
+RETURNS BOOLEAN AS $$
+DECLARE
+    game_exists BOOLEAN;
+BEGIN
+    SELECT EXISTS (
+        SELECT 1
+        FROM Libraries
+        WHERE game_id = game_id_param
+        LIMIT 1
+    ) INTO game_exists;
+
+    IF game_exists THEN
+        RETURN false;
+    ELSE
+        INSERT INTO Carts (game_id, user_id)
+        VALUES (game_id_param, user_id_param);
+        RETURN true;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+select * from orders
+;
+**************************
+
+ order_id | user_id | order_date |        status        | amount 
+----------+---------+------------+----------------------+--------
+        6 |       2 | 2023-10-30 | Заказ не сформирован |    0.0
+        5 |       1 | 2023-10-30 | Заказ не сформирован |       
+        7 |      11 | 2023-10-30 | Заказ ждет оплаты    |  39.99
+        8 |      11 | 2023-10-31 | Заказ не сформирован |  79.98
+       10 |      16 | 2023-11-21 | Заказ ждет оплаты    |  49.98
+(5 строк)
+
+********* ЗАПРОС *********
+Select add_game_to_carts(2, 5);
+**************************
+
+ add_game_to_carts 
+-------------------
+ t
+(1 строка)
+
+********* ЗАПРОС *********
+Select add_game_to_carts(2, 5);
+**************************
+
+********* ЗАПРОС *********
+Select add_game_to_carts(3, 5);
+**************************
+
+ add_game_to_carts 
+-------------------
+ f
+(1 строка)
+
+********* ЗАПРОС *********
+select * from libraries;
+**************************
+
+ game_id | user_id 
+---------+---------
+       1 |       1
+       1 |       2
+       1 |       3
+       3 |      15
+      10 |      15
+       9 |      15
+(6 строк)
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION add_game_to_carts(game_id_param INT, user_id_param INT)
+RETURNS BOOLEAN AS $$
+DECLARE
+    game_exists BOOLEAN;
+BEGIN
+    SELECT EXISTS (
+        SELECT 1
+        FROM Libraries
+        WHERE game_id = game_id_param AND user_id = user_id_param
+        LIMIT 1
+    ) INTO game_exists;
+
+    IF game_exists THEN
+        RETURN false;
+    ELSE
+        INSERT INTO Carts (game_id, user_id)
+        VALUES (game_id_param, user_id_param);
+        RETURN true;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+Select add_game_to_carts(3, 5);
+**************************
+
+ add_game_to_carts 
+-------------------
+ t
+(1 строка)
+
+********* ЗАПРОС *********
+select * from carts;
+**************************
+
+ game_id | user_id 
+---------+---------
+       1 |       5
+       1 |       6
+       1 |       9
+       3 |      16
+      10 |      16
+       9 |      16
+       2 |       5
+       3 |       5
+(8 строк)
+
+********* ЗАПРОС *********
+select create_order_from_cart(5);
+**************************
+
+ create_order_from_cart 
+------------------------
+ 
+(1 строка)
+
+********* ЗАПРОС *********
+select * from orders_games
+;
+**************************
+
+ game_id | order_id 
+---------+----------
+       1 |        7
+       3 |        7
+       4 |        8
+       6 |        8
+       3 |       10
+      10 |       10
+       9 |       10
+       1 |       11
+       2 |       11
+       3 |       11
+(10 строк)
+
+********* ЗАПРОС *********
+select * from orders
+;
+**************************
+
+ order_id | user_id | order_date |        status        | amount 
+----------+---------+------------+----------------------+--------
+        6 |       2 | 2023-10-30 | Заказ не сформирован |    0.0
+        5 |       1 | 2023-10-30 | Заказ не сформирован |       
+        7 |      11 | 2023-10-30 | Заказ ждет оплаты    |  39.99
+        8 |      11 | 2023-10-31 | Заказ не сформирован |  79.98
+       10 |      16 | 2023-11-21 | Заказ ждет оплаты    |  49.98
+       11 |       5 | 2023-11-21 | Заказ ждет оплаты    |  59.98
+(6 строк)
+
+********* ЗАПРОС *********
+update users set balance = 100.0 where user_id = 5;
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION post_message_in_log(message_param character varying(250), user_id_param INT)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO user_logs (user_id, date_of_event, message)
+    VALUES (user_id_param, CURRENT_DATE, message_param);
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+update users set balance = 100.0 where user_id = 5;
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION post_message_in_log(message_param character varying, user_id_param INT)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO user_logs (user_id, date_of_event, message)
+    VALUES (user_id_param, CURRENT_DATE, message_param);
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+update users set balance = 100.0 where user_id = 5;
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION post_message_in_log(message_param VARCHAR(250), user_id_param INT)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO user_logs (user_id, date_of_event, message)
+    VALUES (user_id_param, CURRENT_DATE, message_param);
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+update users set balance = 100.0 where user_id = 5;
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION post_message_in_log(user_id_param INT, message_param VARCHAR(250))
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO user_logs (user_id, date_of_event, message)
+    VALUES (user_id_param, CURRENT_DATE, message_param);
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+update users set balance = 100.0 where user_id = 5;
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION post_message_in_log(user_id_param INT, message_param VARCHAR(250))
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO user_logs (user_id, date_of_event, description)
+    VALUES (user_id_param, CURRENT_DATE, message_param);
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+update users set balance = 100.0 where user_id = 5;
+**************************
+
+UPDATE 1
+********* ЗАПРОС *********
+Select pay_for_order(5, 11);
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION pay_for_order(user_id_param INT, order_id_param INT)
+RETURNS VOID AS $$
+BEGIN
+    -- Переносим игры из заказа пользователя в таблицу Libraries
+    INSERT INTO Libraries (game_id, user_id)
+    SELECT game_id, user_id_param AS user_id
+    FROM Orders_Games
+    WHERE order_id = order_id_param;
+
+    UPDATE Orders SET status = 'Заказ был оплачен пользователем и игры уже хранятся в его библиотеке'
+    WHERE order_id = order_id_param;
+     
+    UPDATE Users SET balance = balance - (SELECT amount FROM Orders WHERE order_id = order_id_param)
+    WHERE user_id = user_id_param;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+Select pay_for_order(5, 11);
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION pay_for_order(user_id_param INT, order_id_param INT)
+RETURNS VOID AS $$
+BEGIN
+    -- Переносим игры из заказа пользователя в таблицу Libraries
+    INSERT INTO Libraries (game_id, user_id)
+    SELECT game_id, user_id_param AS user_id
+    FROM Orders_Games
+    WHERE order_id = order_id_param;
+
+    UPDATE Orders SET status = 'Заказ был оплачен пользователем'
+    WHERE order_id = order_id_param;
+     
+    UPDATE Users SET balance = balance - (SELECT amount FROM Orders WHERE order_id = order_id_param)
+    WHERE user_id = user_id_param;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+Select pay_for_order(5, 11);
+**************************
+
+ pay_for_order 
+---------------
+ 
+(1 строка)
+
+********* ЗАПРОС *********
+select * from libraries where user_id = 5
+;
+**************************
+
+ game_id | user_id 
+---------+---------
+       1 |       5
+       2 |       5
+       3 |       5
+(3 строки)
+
+********* ЗАПРОС *********
+Select add_game_to_carts(2, 5);
+**************************
+
+ add_game_to_carts 
+-------------------
+ f
+(1 строка)
+
+********* ЗАПРОС *********
+Select add_game_to_carts(2, 5);
+**************************
+
+ add_game_to_carts 
+-------------------
+ f
+(1 строка)
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION pay_for_order(user_id_param INT, order_id_param INT)
+RETURNS BOOLEAN AS $$
+DECLARE
+    total_amount DECIMAL;
+BEGIN
+    -- Получаем общую сумму заказа
+    SELECT amount INTO total_amount
+    FROM Orders
+    WHERE order_id = order_id_param;
+
+    -- Проверяем, достаточно ли средств у пользователя
+    IF (SELECT balance FROM Users WHERE user_id = user_id_param) >= total_amount THEN
+        -- Если достаточно средств, выполняем операции
+        INSERT INTO Libraries (game_id, user_id)
+        SELECT game_id, user_id_param AS user_id
+        FROM Orders_Games
+        WHERE order_id = order_id_param;
+
+        UPDATE Orders SET status = 'Заказ был оплачен пользователем'
+        WHERE order_id = order_id_param;
+
+        UPDATE Users SET balance = balance - total_amount
+        WHERE user_id = user_id_param;
+
+        RETURN true;
+    ELSE
+        -- Если недостаточно средств, возвращаем false
+        RETURN false;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+********* ЗАПРОС *********
+DROP FUNCTION pay_for_order(integer,integer)
+;
+**************************
+
+DROP FUNCTION
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION pay_for_order(user_id_param INT, order_id_param INT)
+RETURNS BOOLEAN AS $$
+DECLARE
+    total_amount DECIMAL;
+BEGIN
+    -- Получаем общую сумму заказа
+    SELECT amount INTO total_amount
+    FROM Orders
+    WHERE order_id = order_id_param;
+
+    -- Проверяем, достаточно ли средств у пользователя
+    IF (SELECT balance FROM Users WHERE user_id = user_id_param) >= total_amount THEN
+        -- Если достаточно средств, выполняем операции
+        INSERT INTO Libraries (game_id, user_id)
+        SELECT game_id, user_id_param AS user_id
+        FROM Orders_Games
+        WHERE order_id = order_id_param;
+
+        UPDATE Orders SET status = 'Заказ был оплачен пользователем'
+        WHERE order_id = order_id_param;
+
+        UPDATE Users SET balance = balance - total_amount
+        WHERE user_id = user_id_param;
+
+        RETURN true;
+    ELSE
+        -- Если недостаточно средств, возвращаем false
+        RETURN false;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+select * from triggers
+;
+**************************
+
+********* ЗАПРОС *********
+84;
+**************************
+
+********* ЗАПРОС *********
+6u
+SELECT trigger_name, event_object_table, action_timing, event_manipulation, action_statement
+FROM information_schema.triggers
+WHERE trigger_schema NOT IN ('pg_catalog', 'information_schema');
+**************************
+
+********* ЗАПРОС *********
+SELECT trigger_name, event_object_table, action_timing, event_manipulation, action_statement
+FROM information_schema.triggers
+WHERE trigger_schema NOT IN ('pg_catalog', 'information_schema');
+**************************
+
+        trigger_name         | event_object_table | action_timing | event_manipulation |                    action_statement                     
+-----------------------------+--------------------+---------------+--------------------+---------------------------------------------------------
+ update_sum_of_order_trigger | orders_games       | AFTER         | INSERT             | EXECUTE FUNCTION update_sum_of_order_trigger_function()
+ insert_new_user_trigger     | users              | AFTER         | INSERT             | EXECUTE FUNCTION log_inserted_user()
+ update_user_trigger         | users              | AFTER         | UPDATE             | EXECUTE FUNCTION log_updated_user_data()
+ update_balance_of_user      | payments           | AFTER         | UPDATE             | EXECUTE FUNCTION add_money_to_user_balance()
+(4 строки)
+
+********* ЗАПРОС *********
+SELECT routine_name, routine_definition
+FROM information_schema.routines
+WHERE routine_schema NOT IN ('pg_catalog', 'information_schema')
+    AND routine_type = 'FUNCTION';
+**************************
+
+             routine_name             |                                                     routine_definition                                                      
+--------------------------------------+-----------------------------------------------------------------------------------------------------------------------------
+ create_order_from_cart               |                                                                                                                            +
+                                      | DECLARE                                                                                                                    +
+                                      |     new_order_id INT;                                                                                                      +
+                                      | BEGIN                                                                                                                      +
+                                      |     -- Создаем новую строку в таблице Orders для пользователя                                                              +
+                                      |     INSERT INTO Orders (user_id, order_date, status, amount)                                                               +
+                                      |     VALUES (user_id_param, CURRENT_DATE, 'Заказ ждет оплаты', 0)                                                           +
+                                      |     RETURNING order_id INTO new_order_id;                                                                                  +
+                                      |                                                                                                                            +
+                                      |     -- Переносим игры из корзины пользователя в таблицу Orders_Games                                                       +
+                                      |     INSERT INTO Orders_Games (game_id, order_id)                                                                           +
+                                      |     SELECT game_id, new_order_id                                                                                           +
+                                      |     FROM Carts                                                                                                             +
+                                      |     WHERE user_id = user_id_param;                                                                                         +
+                                      | END;                                                                                                                       +
+                                      | 
+ update_sum_of_order_trigger_function |                                                                                                                            +
+                                      | BEGIN                                                                                                                      +
+                                      |     UPDATE Orders                                                                                                          +
+                                      |     SET amount = amount + (SELECT cost FROM Games WHERE game_id = NEW.game_id)                                             +
+                                      |     WHERE order_id = NEW.order_id;                                                                                         +
+                                      |     RETURN NEW;                                                                                                            +
+                                      | END;                                                                                                                       +
+                                      | 
+ get_avg_rating_of_game               |                                                                                                                            +
+                                      | DECLARE avg_rating DECIMAL;                                                                                                +
+                                      | BEGIN                                                                                                                      +
+                                      |     SELECT AVG(rating) INTO avg_rating                                                                                     +
+                                      |     FROM Reviews                                                                                                           +
+                                      |     WHERE game_id = game_id_param;                                                                                         +
+                                      |                                                                                                                            +
+                                      |     RETURN avg_rating;                                                                                                     +
+                                      | END;                                                                                                                       +
+                                      | 
+ add_money_to_user_balance            |                                                                                                                            +
+                                      | DECLARE                                                                                                                    +
+                                      |     amount DECIMAL;                                                                                                        +
+                                      | BEGIN                                                                                                                      +
+                                      |     amount := NEW.amount;                                                                                                  +
+                                      |                                                                                                                            +
+                                      |     UPDATE Users SET balance = balance + NEW.amount                                                                        +
+                                      |     WHERE user_id = NEW.user_id;                                                                                           +
+                                      |                                                                                                                            +
+                                      |     RETURN NEW;                                                                                                            +
+                                      | END;                                                                                                                       +
+                                      | 
+ log_deleted_game                     |                                                                                                                            +
+                                      | DECLARE                                                                                                                    +
+                                      |     message VARCHAR(250);                                                                                                  +
+                                      | BEGIN                                                                                                                      +
+                                      |     message := 'Игра с ID = ' || OLD.game_id || ' и названием = ' || OLD.name || ' была удалена.';                         +
+                                      |                                                                                                                            +
+                                      |     PERFORM post_message_in_log(message);                                                                                  +
+                                      |                                                                                                                            +
+                                      |     RETURN OLD;                                                                                                            +
+                                      | END;                                                                                                                       +
+                                      | 
+ post_message_in_log                  |                                                                                                                            +
+                                      | BEGIN                                                                                                                      +
+                                      |     RAISE NOTICE '%', message_param;                                                                                       +
+                                      | END;                                                                                                                       +
+                                      | 
+ log_inserted_user                    |                                                                                                                            +
+                                      | DECLARE                                                                                                                    +
+                                      |     message VARCHAR(250);                                                                                                  +
+                                      | BEGIN                                                                                                                      +
+                                      |     message := 'Новый пользователь с ID = ' || NEW.user_id || ' и именем = ' || NEW.nickname || ' был добавлен в таблицу.';+
+                                      |                                                                                                                            +
+                                      |     PERFORM post_message_in_log(NEW.user_id, message);                                                                     +
+                                      |                                                                                                                            +
+                                      |     RETURN NEW;                                                                                                            +
+                                      | END;                                                                                                                       +
+                                      | 
+ log_updated_user_data                |                                                                                                                            +
+                                      | DECLARE                                                                                                                    +
+                                      |     message VARCHAR(250);                                                                                                  +
+                                      | BEGIN                                                                                                                      +
+                                      |     message := 'Данные пользователя с ID = ' || OLD.user_id || ' были обновлены.';                                         +
+                                      |                                                                                                                            +
+                                      |     IF OLD.nickname <> NEW.nickname THEN                                                                                   +
+                                      |         message := message || ' Изменено имя пользователя: ' || OLD.nickname || ' -> ' || NEW.nickname || '.';             +
+                                      |     END IF;                                                                                                                +
+                                      |                                                                                                                            +
+                                      |     IF OLD.email <> NEW.email THEN                                                                                         +
+                                      |         message := message || ' Изменен адрес электронной почты: ' || OLD.email || ' -> ' || NEW.email || '.';             +
+                                      |     END IF;                                                                                                                +
+                                      |                                                                                                                            +
+                                      |     IF OLD.balance <> NEW.balance THEN                                                                                     +
+                                      |         message := message || ' Пополнен баланс пользователя: ' || OLD.balance || ' -> ' || NEW.balance || '.';            +
+                                      |     END IF;                                                                                                                +
+                                      |                                                                                                                            +
+                                      |     PERFORM post_message_in_log(NEW.user_id, message);                                                                     +
+                                      |                                                                                                                            +
+                                      |     RETURN NEW;                                                                                                            +
+                                      | END;                                                                                                                       +
+                                      | 
+ log_updated_game_data                |                                                                                                                            +
+                                      | DECLARE                                                                                                                    +
+                                      |     message VARCHAR(250);                                                                                                  +
+                                      | BEGIN                                                                                                                      +
+                                      |     message := 'Данные об игре с ID = ' || OLD.game_id || ' были обновлены.';                                              +
+                                      |                                                                                                                            +
+                                      |     IF OLD.name <> NEW.name THEN                                                                                           +
+                                      |         message := message || ' Изменено название игры: ' || OLD.name || ' -> ' || NEW.name || '.';                        +
+                                      |     END IF;                                                                                                                +
+                                      |                                                                                                                            +
+                                      |     IF OLD.category_id <> NEW.category_id THEN                                                                             +
+                                      |         message := message || ' Изменен жанр игры: ' || OLD.category_id || ' -> ' || NEW.category_id || '.';               +
+                                      |     END IF;                                                                                                                +
+                                      |                                                                                                                            +
+                                      |     IF OLD.cost <> NEW.cost THEN                                                                                           +
+                                      |         message := message || ' Изменена стоимость игры: ' || OLD.cost || ' -> ' || NEW.cost || '.';                       +
+                                      |     END IF;                                                                                                                +
+                                      |                                                                                                                            +
+                                      |     PERFORM post_message_in_log(message);                                                                                  +
+                                      |                                                                                                                            +
+                                      |     RETURN NEW;                                                                                                            +
+                                      | END;                                                                                                                       +
+                                      | 
+ add_game_to_carts                    |                                                                                                                            +
+                                      | DECLARE                                                                                                                    +
+                                      |     game_exists BOOLEAN;                                                                                                   +
+                                      | BEGIN                                                                                                                      +
+                                      |     SELECT EXISTS (                                                                                                        +
+                                      |         SELECT 1                                                                                                           +
+                                      |         FROM Libraries                                                                                                     +
+                                      |         WHERE game_id = game_id_param AND user_id = user_id_param                                                          +
+                                      |         LIMIT 1                                                                                                            +
+                                      |     ) INTO game_exists;                                                                                                    +
+                                      |                                                                                                                            +
+                                      |     IF game_exists THEN                                                                                                    +
+                                      |         RETURN false;                                                                                                      +
+                                      |     ELSE                                                                                                                   +
+                                      |         INSERT INTO Carts (game_id, user_id)                                                                               +
+                                      |         VALUES (game_id_param, user_id_param);                                                                             +
+                                      |         RETURN true;                                                                                                       +
+                                      |     END IF;                                                                                                                +
+                                      | END;                                                                                                                       +
+                                      | 
+ post_message_in_log                  |                                                                                                                            +
+                                      | BEGIN                                                                                                                      +
+                                      |     INSERT INTO user_logs (user_id, date_of_event, message)                                                                +
+                                      |     VALUES (user_id_param, CURRENT_DATE, message_param);                                                                   +
+                                      | END;                                                                                                                       +
+                                      | 
+ post_message_in_log                  |                                                                                                                            +
+                                      | BEGIN                                                                                                                      +
+                                      |     INSERT INTO user_logs (user_id, date_of_event, description)                                                            +
+                                      |     VALUES (user_id_param, CURRENT_DATE, message_param);                                                                   +
+                                      | END;                                                                                                                       +
+                                      | 
+ pay_for_order                        |                                                                                                                            +
+                                      | DECLARE                                                                                                                    +
+                                      |     total_amount DECIMAL;                                                                                                  +
+                                      | BEGIN                                                                                                                      +
+                                      |     -- Получаем общую сумму заказа                                                                                         +
+                                      |     SELECT amount INTO total_amount                                                                                        +
+                                      |     FROM Orders                                                                                                            +
+                                      |     WHERE order_id = order_id_param;                                                                                       +
+                                      |                                                                                                                            +
+                                      |     -- Проверяем, достаточно ли средств у пользователя                                                                     +
+                                      |     IF (SELECT balance FROM Users WHERE user_id = user_id_param) >= total_amount THEN                                      +
+                                      |         -- Если достаточно средств, выполняем операции                                                                     +
+                                      |         INSERT INTO Libraries (game_id, user_id)                                                                           +
+                                      |         SELECT game_id, user_id_param AS user_id                                                                           +
+                                      |         FROM Orders_Games                                                                                                  +
+                                      |         WHERE order_id = order_id_param;                                                                                   +
+                                      |                                                                                                                            +
+                                      |         UPDATE Orders SET status = 'Заказ был оплачен пользователем'                                                       +
+                                      |         WHERE order_id = order_id_param;                                                                                   +
+                                      |                                                                                                                            +
+                                      |         UPDATE Users SET balance = balance - total_amount                                                                  +
+                                      |         WHERE user_id = user_id_param;                                                                                     +
+                                      |                                                                                                                            +
+                                      |         RETURN true;                                                                                                       +
+                                      |     ELSE                                                                                                                   +
+                                      |         -- Если недостаточно средств, возвращаем false                                                                     +
+                                      |         RETURN false;                                                                                                      +
+                                      |     END IF;                                                                                                                +
+                                      | END;                                                                                                                       +
+                                      | 
+(13 строк)
+
+********* ЗАПРОС *********
+insert into Users (nickname, password, email, role_id, balance) values ('Dima 2', '$2b$04$EW4zWKiZAPRdqvz/dqb6K.3qA26GLjsT8ZBAQDpb6JFjDEqGxbVuW', 'tfance0@jalbum.net', 1, 109.59);
+**************************
+
+********* ЗАПРОС *********
+insert into Users (nickname, password, email, role_id, balance) values ('Dima 2', '$2b$04$EW4zWKiZAPRdqvz/dqb6K.3qA26GLjsT8ZBAQDpb6JFjDEqGxbVuW', 'tfance0@jalbum6.net', 1, 109.59);
+**************************
+
+INSERT 0 1
+********* ЗАПРОС *********
+select * from user_logs where user_id = 21;
+**************************
+
+ user_log_id | user_id | date_of_event | description 
+-------------+---------+---------------+-------------
+(0 строк)
+
+********* ЗАПРОС *********
+select * from user_logs where user_id = 20;
+**************************
+
+ user_log_id | user_id | date_of_event | description 
+-------------+---------+---------------+-------------
+(0 строк)
+
+********* ЗАПРОС *********
+select * from user_logs;
+**************************
+
+ user_log_id | user_id | date_of_event |                                        description                                         
+-------------+---------+---------------+--------------------------------------------------------------------------------------------
+           1 |       5 | 2023-11-21    | Данные пользователя с ID = 5 были обновлены. Пополнен баланс пользователя: 87.45 -> 100.0.
+           2 |       5 | 2023-11-21    | Данные пользователя с ID = 5 были обновлены. Пополнен баланс пользователя: 100.0 -> 40.02.
+           3 |      22 | 2023-11-21    | Новый пользователь с ID = 22 и именем = Dima 2 был добавлен в таблицу.
+(3 строки)
+
+********* ЗАПРОС *********
+84;
+**************************
+
+********* ЗАПРОС *********
+6u
+CREATE OR REPLACE FUNCTION log_updated_user_data()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Данные пользователя с ID = ' || OLD.user_id || ' были обновлены.';
+
+    IF OLD.nickname <> NEW.nickname THEN
+        message := message || ' Изменено имя пользователя: ' || OLD.nickname || ' -> ' || NEW.nickname || '.';
+    END IF;
+
+    IF OLD.email <> NEW.email THEN
+        message := message || ' Изменен адрес электронной почты: ' || OLD.email || ' -> ' || NEW.email || '.';
+    END IF;
+
+    IF OLD.balance <> NEW.balance THEN
+        message := message || ' Изменен баланс пользователя: ' || OLD.balance || ' -> ' || NEW.balance || '.';
+    END IF;
+
+    PERFORM post_message_in_log(NEW.user_id, message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+********* ЗАПРОС *********
+CREATE OR REPLACE FUNCTION log_updated_user_data()
+RETURNS TRIGGER AS $$
+DECLARE
+    message VARCHAR(250);
+BEGIN
+    message := 'Данные пользователя с ID = ' || OLD.user_id || ' были обновлены.';
+
+    IF OLD.nickname <> NEW.nickname THEN
+        message := message || ' Изменено имя пользователя: ' || OLD.nickname || ' -> ' || NEW.nickname || '.';
+    END IF;
+
+    IF OLD.email <> NEW.email THEN
+        message := message || ' Изменен адрес электронной почты: ' || OLD.email || ' -> ' || NEW.email || '.';
+    END IF;
+
+    IF OLD.balance <> NEW.balance THEN
+        message := message || ' Изменен баланс пользователя: ' || OLD.balance || ' -> ' || NEW.balance || '.';
+    END IF;
+
+    PERFORM post_message_in_log(NEW.user_id, message);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+**************************
+
+CREATE FUNCTION
+********* ЗАПРОС *********
+select * from orders;
+**************************
+
+ order_id | user_id | order_date |             status              | amount 
+----------+---------+------------+---------------------------------+--------
+        6 |       2 | 2023-10-30 | Заказ не сформирован            |    0.0
+        5 |       1 | 2023-10-30 | Заказ не сформирован            |       
+        7 |      11 | 2023-10-30 | Заказ ждет оплаты               |  39.99
+        8 |      11 | 2023-10-31 | Заказ не сформирован            |  79.98
+       10 |      16 | 2023-11-21 | Заказ ждет оплаты               |  49.98
+       11 |       5 | 2023-11-21 | Заказ был оплачен пользователем |  59.98
+(6 строк)
+
+********* ЗАПРОС *********
+insert into orders_games (game_id, order_id) values (4, 7);
+**************************
+
+INSERT 0 1
+********* ЗАПРОС *********
+select * from orders;
+**************************
+
+ order_id | user_id | order_date |             status              | amount 
+----------+---------+------------+---------------------------------+--------
+        6 |       2 | 2023-10-30 | Заказ не сформирован            |    0.0
+        5 |       1 | 2023-10-30 | Заказ не сформирован            |       
+        8 |      11 | 2023-10-31 | Заказ не сформирован            |  79.98
+       10 |      16 | 2023-11-21 | Заказ ждет оплаты               |  49.98
+       11 |       5 | 2023-11-21 | Заказ был оплачен пользователем |  59.98
+        7 |      11 | 2023-10-30 | Заказ ждет оплаты               |  69.98
+(6 строк)
+
+********* ЗАПРОС *********
+select * from libraries where user_id = 5;
+**************************
+
+ game_id | user_id 
+---------+---------
+       1 |       5
+       2 |       5
+       3 |       5
+(3 строки)
+
+********* ЗАПРОС *********
+select add_game_to_carts(2, 5);
+**************************
+
+ add_game_to_carts 
+-------------------
+ f
+(1 строка)
+
+********* ЗАПРОС *********
+select add_game_to_carts(6, 5);
+**************************
+
+ add_game_to_carts 
+-------------------
+ t
+(1 строка)
+

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+{% load static %}
+{% load navmenu_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Page Title</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles -->
+    <style>
+        /* Custom styles here */
+        /* Переопределение стилей Bootstrap для навигационного меню */
+        .navbar-nav {
+            padding-left: 15px;
+        }
+        .navbar-brand {
+            margin-left: 15px;
+        }
+        .btn-login {
+            margin-left: 15px;
+        }
+    </style>
+</head>
+<body>
+    {% show_navbar_menu %}
+    {% block content %}
+	{% endblock %}
+<!-- Bootstrap JS (необходим для работы некоторых компонентов) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

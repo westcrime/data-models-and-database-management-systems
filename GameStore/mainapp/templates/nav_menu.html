@@ -1,0 +1,21 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Dima's Game Store</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            {% for m in menu %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url m.url_name %}">{{ m.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% if username == 'error' %}
+        <button class="btn btn-outline-primary my-2 my-sm-0 btn-login" type="submit">Войти</button>
+    {% else %}
+        <a class="my-2 my-sm-0 btn btn-outline-primary" href="#">{{ username }}</a>
+    {% endif %}
+</nav>
