@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Dima's Game Store</a>
+    <a class="navbar-brand" href="{% url 'catalog' %}">Dima's Game Store</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -14,8 +14,17 @@
         </ul>
     </div>
     {% if username == 'error' %}
-        <button class="btn btn-outline-primary my-2 my-sm-0 btn-login" type="submit">Войти</button>
+        <a class="btn btn-outline-primary my-2 my-sm-0 btn-login" href="{% url 'login' %}">Войти</a>
     {% else %}
-        <a class="my-2 my-sm-0 btn btn-outline-primary" href="#">{{ username }}</a>
+    <div class="dropdown" style="margin-right: 100px;">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ username }} {{ balance }}$
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            {% for u in user_menu %}
+            <a class="dropdown-item" href="{% url u.url_name %}">{{ u.title }}</a>
+            {% endfor %}
+        </div>
+    </div>
     {% endif %}
 </nav>

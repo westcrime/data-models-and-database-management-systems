@@ -15,6 +15,7 @@ def show_navbar_menu(menu=None):
         {'title': "Мой профиль", 'url_name': 'profile'},
         {'title': "Корзина", 'url_name': 'cart'},
         {'title': "Библиотека", 'url_name': 'library'},
-        {'title': "Выйти из профиля", 'url_name': 'logout'},]
+        {'title': "Выйти из профиля", 'url_name': 'logout'},
+        {'title': "Пополнить баланс", 'url_name': 'add_money_to_balance'},]
 
-    return {"menu": menu, "user_menu": user_menu, 'username': CurrentUser.get_username()}
+    return {"menu": menu, "user_menu": user_menu, 'username': CurrentUser.get_username(), 'balance': CurrentUser.get_balance()}

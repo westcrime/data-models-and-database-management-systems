@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Корзина</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Цена</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for game in cart_games %}
+            <tr>
+                <td>{{ game.game_name }}</td>
+                <td>{{ game.game_description }}</td>
+                <td>${{ game.game_cost }}</td>
+                <td>
+                    <a href="/remove_game_from_cart/{{ game.game_id }}/" class="btn btn-danger btn-sm">Удалить</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'add_games_to_order' %}" class="btn btn-primary">Создать заказ</a>
+</div>
+
+{% endblock %}

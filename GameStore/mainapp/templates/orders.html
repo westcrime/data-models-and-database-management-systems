@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Список заказов</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Дата заказа</th>
+                <th>Статус</th>
+                <th>Сумма</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.order_date }}</td>
+                <td>{{ order.status }}</td>
+                <td>${{ order.amount }}</td>
+                <td>
+                    <a href="{% url 'pay_order' order.order_id %}" class="btn btn-primary">Оплатить заказ</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

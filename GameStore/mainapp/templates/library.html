@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Библиотека игр</h2>
+    <div class="row">
+        {% for game in games %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ game.game_name }}</h5>
+                    <p class="card-text">{{ game.game_description }}</p>
+                    <p class="card-text"><strong>Издатель:</strong> {{ game.game_publisher_name }}</p>
+                    <p class="card-text"><strong>Категория:</strong> {{ game.game_category_name }}</p>
+                    <p class="card-text"><strong>Цена:</strong> ${{ game.game_cost }}</p>
+                    <a href="{% url 'game_details' game.game_id %}" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -252,6 +252,10 @@ FROM Users u
 INNER JOIN Orders o
 ON u.user_id = o.user_id;
 
+-- Получение игр в корзине конкретного пользователя
+SELECT g.name, g.description, g.cost FROM Games g
+LEFT JOIN Carts c ON c.user_id = 2 WHERE g.game_id = c.game_id;
+
 -- Вывод пользователей и общая стоимость их заказов
 SELECT u.nickname, SUM(g.cost) AS total_cost FROM Users u
 LEFT JOIN Orders o ON u.user_id = o.user_id

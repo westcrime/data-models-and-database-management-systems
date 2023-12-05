@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container game-details">
+    <div class="game-info">
+        <h2>Подробности об игре</h2>
+        <p><strong>Название:</strong> {{ game.game_name }}</p>
+        <p><strong>Описание:</strong> {{ game.game_description }}</p>
+        <p><strong>Издатель:</strong> {{ game.game_publisher_name }}</p>
+        <p><strong>Категория:</strong> {{ game.game_category_name }}</p>
+        <p><strong>Цена:</strong> ${{ game.game_cost }}</p>
+        <p><strong>Средняя оценка пользователей:</strong> {{ game.game_avg_rating }}</p>
+        <!-- Добавьте другие детали об игре по желанию -->
+    </div>
+</div>
+{% endblock %}

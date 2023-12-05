@@ -2,18 +2,32 @@
 {% load static %}
 
 {% block content %}
+<div class="container mt-5">
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Сортировать по
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="/catalog?sort=name">Имени</a>
+            <a class="dropdown-item" href="/catalog?sort=publisher_id">Издателю</a>
+            <a class="dropdown-item" href="/catalog?sort=cost">Цене</a>
+        </div>
+    </div>
+</div>
 <div class="container">
     <div class="row">
         {% for game in games %}
             <div class="col-lg-4 col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{ game.game_name }}</h5>
+                        <a class="card-title" href="/game/{{ game.game_id }}/">{{ game.game_name }}</a>
                         <p class="card-text">Описание: {{ game.game_description }}</p>
                         <p class="card-text">Издатель: {{ game.game_publisher_name }}</p>
                         <p class="card-text">Категория: {{ game.game_category_name }}</p>
                         <p class="card-text">Цена: ${{ game.game_cost }}</p>
                         <p class="card-text">Средняя оценка пользователей: {{ game.game_avg_rating }}</p>
+                        <a class="card-title" href="/add_game_to_cart/{{ game.game_id }}/">Добавить игру в корзину</a><br>
+                        <a class="card-title" href="/add_game_to_wishlists/{{ game.game_id }}/">Добавить игру в список желаемого</a>
                     </div>
                 </div>
             </div>
